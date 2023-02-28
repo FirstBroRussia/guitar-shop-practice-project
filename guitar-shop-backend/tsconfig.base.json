@@ -1,0 +1,27 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "es2015",
+    "module": "esnext",
+    "lib": ["es2017", "dom"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@guitar-shop/@nrwl/core": ["libs/@nrwl/core/src/index.ts"],
+      "@guitar-shop/@nrwl/shared-types": [
+        "libs/@nrwl/shared-types/src/index.ts"
+      ],
+      "@guitar-shop/core": ["libs/core/src/index.ts"],
+      "@guitar-shop/shared-types": ["libs/shared-types/src/index.ts"]
+    }
+  },
+  "exclude": ["node_modules", "tmp"]
+}

@@ -1,0 +1,46 @@
+{
+  "name": "guitar-shop-cli",
+  "version": "1.0.0",
+  "description": "CLI интерфейс для проекта «Guitar Shop»",
+  "main": "cli.js",
+  "scripts": {
+    "start": "npm run build && node ./dist/cli.js",
+    "cli:dev": "npm run ts ./src/cli/cli.ts",
+    "build": "npm run clean && npm run compile",
+    "lint": "eslint src/ --ext .ts",
+    "compile": "tsc -p tsconfig.json",
+    "clean": "rimraf dist",
+    "ts": "ts-node",
+    "mock:server": "json-server ./mocks/mocks-server-data.json --port 3123",
+    "json-server": "json-server"
+  },
+  "type": "module",
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/chalk": "2.2.0",
+    "@types/json-server": "0.14.4",
+    "@types/mongoose": "5.11.97",
+    "@types/node": "18.11.13",
+    "@types/pino": "7.0.5",
+    "@types/reflect-metadata": "0.1.0",
+    "@typescript-eslint/eslint-plugin": "5.46.0",
+    "@typescript-eslint/parser": "5.46.0",
+    "eslint": "8.29.0",
+    "eslint-config-htmlacademy": "8.0.0",
+    "json-server": "0.17.1",
+    "pino-pretty": "9.1.1",
+    "rimraf": "3.0.2",
+    "ts-node": "10.9.1",
+    "typescript": "4.9.4"
+  },
+  "dependencies": {
+    "@typegoose/typegoose": "10.1.0",
+    "@types/dotenv": "8.2.0",
+    "chalk": "5.2.0",
+    "dayjs": "1.11.7",
+    "mongoose": "6.9.0",
+    "pino": "8.8.0",
+    "reflect-metadata": "0.1.13"
+  }
+}
