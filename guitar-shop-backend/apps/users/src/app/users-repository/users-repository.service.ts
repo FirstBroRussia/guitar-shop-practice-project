@@ -9,7 +9,7 @@ import { LogoutUserEntity } from './entity/guitar-shop-logouted-user.entity';
 import { GuitarShopUserEntity } from './entity/guitar-shop-user.entity';
 
 const ONE_THOUSAND_VALUE = 1_000;
-const BYPASS_DATABASE_TIME = 1_000 * 60;
+const BYPASS_DATABASE_TIME = 1_000 * 60 * 120;
 
 @Injectable()
 export class UsersRepositoryService {
@@ -30,6 +30,7 @@ export class UsersRepositoryService {
       await this.logoutedUsersModel.deleteMany({
         exp: { $lte: correctDateNow, },
       });
+      this.logger.log(`Произведена операция по очистке авторизационных токенов в БД вышедших из системы пользователей.`);
     }, BYPASS_DATABASE_TIME);
   }
 
@@ -71,14 +72,21 @@ export class UsersRepositoryService {
     const newUser = new GuitarShopUserEntity().fillObject(dto).setPasswordHash(password, this.config.get('MONGO_DB_CREATE_USERS_SECRET'));
     const newUserModel = new this.usersModel(newUser);
 
-    return await newUserModel.save();
+    const result =  await newUserModel.save();
+    this.logger.log(`Создан новый пользователь с email: ${email}.`);
+
+    return result;
   }
 
   public async createLogoutedUser(dto: GuitarShopLogoutUserDto): Promise<LogoutUserEntity> {
+    const { email } = dto;
     const newLogoutedUser = new LogoutUserEntity().fillObject(dto);
     const newLogoutedUserModel = new this.logoutedUsersModel(newLogoutedUser);
 
-    return await newLogoutedUserModel.save();
+    const result = await newLogoutedUserModel.save();
+    this.logger.log(`Создана запись в БД вышедшего из системы пользователя с email: ${email}.`);
+
+    return result;
   }
 
   public async findLogoutedUser(accessToken: string): Promise<LogoutUserEntity | null> {

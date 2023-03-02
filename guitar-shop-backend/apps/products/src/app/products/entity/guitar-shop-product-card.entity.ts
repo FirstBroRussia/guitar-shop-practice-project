@@ -1,9 +1,11 @@
 import { TypeOrmBase } from '@guitar-shop/core';
-import { CreateGuitarShopProductCardDto, GuitarShopProductCardInterface, GuitarStringsType, GuitarType } from '@guitar-shop/shared-types';
+import { GuitarEnum, GuitarShopCreateProductCardDto, GuitarShopProductCardInterface, GuitarStringsEnum, GuitarStringsType, GuitarType } from '@guitar-shop/shared-types';
 
-import { Column } from 'typeorm';
+import { Entity, Column } from 'typeorm';
 
-export default class GuitarShopProductCardTypeOrmEntity extends TypeOrmBase implements GuitarShopProductCardInterface {
+
+@Entity('products')
+export default class GuitarShopProductCardEntity extends TypeOrmBase implements GuitarShopProductCardInterface {
   @Column()
   title: string;
 
@@ -15,13 +17,19 @@ export default class GuitarShopProductCardTypeOrmEntity extends TypeOrmBase impl
   })
   imageLink: string;
 
-  @Column()
+  @Column({
+    type: "enum",
+    enum: GuitarEnum,
+  })
   guitarType: GuitarType;
 
   @Column()
   article: string;
 
-  @Column()
+  @Column({
+    type: "enum",
+    enum: GuitarStringsEnum,
+  })
   guitarStringsCount: GuitarStringsType;
 
   @Column({
@@ -32,12 +40,12 @@ export default class GuitarShopProductCardTypeOrmEntity extends TypeOrmBase impl
   @Column()
   price: number;
 
-  @Column({
-    default: 0,
-  })
-  feedbackCount: number;
+  // @Column({
+  //   default: 0,
+  // })
+  // feedbackCount: number;
 
-  public fillObject(dto: CreateGuitarShopProductCardDto): this {
+  public fillObject(dto: GuitarShopCreateProductCardDto): this {
     const { title, description, guitarType, article, guitarStringsCount, price, imageLink } = dto;
 
     this.title = title;
