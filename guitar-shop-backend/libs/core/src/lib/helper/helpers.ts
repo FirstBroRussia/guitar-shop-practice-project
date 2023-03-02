@@ -5,7 +5,7 @@ export function getMongoConnectionString({username, password, host, port, databa
   return `mongodb://${username}:${password}@${host}:${port}/${databaseName}?authSource=${authDatabase}`;
 }
 
-export const fillDTO = <T, V>(someDto: ClassConstructor<T>, plainObject: V) => {
+export const fillDTO = <T, V>(someDto: ClassConstructor<T>, plainObject: V): T => {
   return plainToInstance(someDto, plainObject, { excludeExtraneousValues: true });
 };
 

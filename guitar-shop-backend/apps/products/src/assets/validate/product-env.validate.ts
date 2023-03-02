@@ -1,4 +1,4 @@
-import { fillDTO } from "@guitar-shop/core";
+import { plainToInstance } from "class-transformer";
 import { IsNumber, IsString, validateSync } from "class-validator";
 import { ProductsEnvInterface } from "../interface/products-env.interface";
 
@@ -12,10 +12,16 @@ class ProductsEnvValidateConfig implements ProductsEnvInterface {
   @IsString()
   POSTGRES_DB_NAME: string;
 
+  @IsString()
+  POSTGRES_DB_USERNAME: string;
+
+  @IsString()
+  POSTGRES_DB_PASSWORD: string;
+
 }
 
 export const productsEnvValidateConfig = (config: Record<string, unknown>) => {
-  const transformConfig = fillDTO(ProductsEnvValidateConfig, config);
+  const transformConfig = plainToInstance(ProductsEnvValidateConfig, config, { enableImplicitConversion: true, });
   const errors = validateSync(transformConfig);
 
   if (errors.length > 0) {

@@ -6,4 +6,7 @@ export class GuitarShopLogoutUserDto {
 
   @Expose()
   exp: number;
+
+  @Expose()
+  email: string;
 }

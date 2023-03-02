@@ -9,17 +9,17 @@ export class GuitarShopCreateProductCardDto implements GuitarShopProductCardInte
   @IsString()
   @MinLength(GuitarShopProductCardConstantValueEnum.TITLE_MIN_LENGTH)
   @MaxLength(GuitarShopProductCardConstantValueEnum.TITLE_MAX_LENGTH)
-  title?: string;
+  title: string;
 
   @Expose()
   @IsString()
   @MinLength(GuitarShopProductCardConstantValueEnum.DESCRIPTION_MIN_LENGTH)
   @MaxLength(GuitarShopProductCardConstantValueEnum.DESCRIPTION_MAX_LENGTH)
-  description?: string;
+  description: string;
 
   @Expose()
   @IsString()
-  imageLink?: string;
+  imageLink: string;
 
   @Expose()
   @IsEnum(GuitarEnum)
@@ -29,16 +29,16 @@ export class GuitarShopCreateProductCardDto implements GuitarShopProductCardInte
   @IsString()
   @MinLength(GuitarShopProductCardConstantValueEnum.ARTICLE_MIN_LENGTH)
   @MaxLength(GuitarShopProductCardConstantValueEnum.ARTICLE_MAX_LENGTH)
-  article?: string;
+  article: string;
 
   @Expose()
   @IsEnum(GuitarStringsEnum)
-  guitarStringsCount?: GuitarStringsType;
+  guitarStringsCount: GuitarStringsType;
 
   @Expose()
   @IsInt()
   @Min(GuitarShopProductCardConstantValueEnum.PRICE_MIN_LENGTH)
   @Max(GuitarShopProductCardConstantValueEnum.PRICE_MAX_LENGTH)
-  price?: number;
+  price: number;
 
 }
