@@ -11,6 +11,7 @@ class UserEnvValidateConfig implements UsersEnvInterface {
   @Max(65535)
   MONGO_DB_PORT: number;
 
+
   @IsString()
   MONGO_DB_NAME: string;
 
@@ -22,6 +23,13 @@ class UserEnvValidateConfig implements UsersEnvInterface {
 
   @IsString()
   MONGO_DB_PASSWORD: string;
+
+  @IsString()
+  MONGO_DB_CREATE_USERS_SECRET: string;
+
+
+  @IsString()
+  JWT_SECRET: string;
 }
 
 export function usersEnvValidateConfig(config: Record<string, unknown>) {

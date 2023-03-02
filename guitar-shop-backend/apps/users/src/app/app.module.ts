@@ -5,11 +5,13 @@ import { getMongoConnectionString } from '@guitar-shop/core';
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigService } from '@nestjs/config';
-import { UsersModule } from './src/users/users.module';
-import { AuthModule } from './src/auth/auth.module';
+import { UsersModule } from './users/users.module';
+import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { UsersEnvInterface } from '../assets/interface/users-env.interface';
 import { usersEnvValidateConfig } from '../assets/validate/users-env.validate';
+import { JwtModule } from '@nestjs/jwt';
+
 
 @Module({
   imports: [
@@ -35,10 +37,21 @@ import { usersEnvValidateConfig } from '../assets/validate/users-env.validate';
         }),
       }),
     }),
+    JwtModule.registerAsync({
+      inject: [ConfigService],
+      useFactory: async (config: ConfigService<UsersEnvInterface>) => ({
+        secret: config.get('JWT_SECRET'),
+        signOptions: {
+          algorithm: 'HS256',
+          expiresIn: '2h',
+        },
+      }),
+    }),
     UsersModule,
     AuthModule,
   ],
   controllers: [],
   providers: [],
+  exports: [],
 })
 export class AppModule {}

@@ -4,7 +4,7 @@ import { Expose } from 'class-transformer';
 import { IsEnum, IsInt, IsString, Max, MaxLength, Min, MinLength } from 'class-validator';
 
 
-export class CreateGuitarShopProductCardDto implements GuitarShopProductCardInterface {
+export class GuitarShopCreateProductCardDto implements GuitarShopProductCardInterface {
   @Expose()
   @IsString()
   @MinLength(GuitarShopProductCardConstantValueEnum.TITLE_MIN_LENGTH)

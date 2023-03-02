@@ -8,7 +8,8 @@ import { NestFactory } from '@nestjs/core';
 
 import { AppModule } from './app/app.module';
 
-const DEFAULT_PORT = 3_333;
+import { MicroserviceDefaultPost } from '@guitar-shop/shared-types';
+
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -16,7 +17,7 @@ async function bootstrap() {
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);
 
-  const port = process.env.PORT || DEFAULT_PORT;
+  const port = process.env.PORT || MicroserviceDefaultPost.ProductsMicroservice;
 
   await app.listen(port);
   Logger.log(

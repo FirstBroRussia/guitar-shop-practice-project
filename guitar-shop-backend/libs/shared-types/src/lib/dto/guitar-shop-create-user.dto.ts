@@ -6,7 +6,7 @@ import { Expose, Transform } from "class-transformer";
 import { IsBoolean, IsEmail, IsString, MaxLength, MinLength } from "class-validator";
 
 
-export class CreateGuitarShopUserDto implements GuitarShopUserInterface {
+export class GuitarShopCreateUserDto implements GuitarShopUserInterface {
   @Expose()
   @IsString()
   @MinLength(GuitarShopUserConstantValueEnum.USERNAME_MIN_LENGTH)

@@ -1,11 +1,8 @@
 // Helpers
 export * from './lib/helper/helpers';
 
+// Exception
+export * from './lib/exception-filter/all-exception.filter';
+
 // Abstract class
 export * from './lib/abstract-class/typeorm-base.abstract';
-
-// MongoDb Entity
-export * from './lib/mongodb-entity/guitar-shop-user.entity';
-
-// TypeORM Entity
-export * from './lib/typeorm-entity/guitar-shop-product-card.entity';
