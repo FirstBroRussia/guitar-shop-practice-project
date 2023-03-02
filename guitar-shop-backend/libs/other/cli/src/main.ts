@@ -10,4 +10,3 @@ cliManager.registerCliCommands([
   new GenerateCommandCli,
 ]);
 cliManager.processCommand(process.argv);
-

@@ -1,0 +1,3 @@
+mongodb://admin:test@localhost:27017/guitar-shop_users?authSource=admin
+
+postgresql://admin:test@localhost:5432/products

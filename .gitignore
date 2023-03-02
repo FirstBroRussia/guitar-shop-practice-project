@@ -3,42 +3,42 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
 # compiled output
-dist
-tmp
-/out-tsc
+**/dist
+**/tmp
+**/out-tsc
 
 # dependencies
-node_modules
+**/node_modules
 
 # IDEs and editors
-/.idea
-.project
-.classpath
-.c9/
-*.launch
-.settings/
-*.sublime-workspace
+**/.idea
+**/.project
+**/.classpath
+**/.c9/
+**/*.launch
+**/.settings/
+**/*.sublime-workspace
 
 # IDE - VSCode
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
+**/.vscode/*
+**/!.vscode/settings.json
+**/!.vscode/tasks.json
+**/!.vscode/launch.json
+**/!.vscode/extensions.json
 
 # misc
-/.sass-cache
-/connect.lock
-/coverage
-/libpeerconnection.log
-npm-debug.log
-yarn-error.log
-testem.log
-/typings
+**/.sass-cache
+**/connect.lock
+**/coverage
+**/libpeerconnection.log
+**/npm-debug.log
+**/yarn-error.log
+**/testem.log
+**/typings
 
 # System Files
-.DS_Store
-Thumbs.db
+**/.DS_Store
+**/Thumbs.db
 
 *.env
 
@@ -48,28 +48,29 @@ Thumbs.db
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-/node_modules
-/.pnp
+**/node_modules
+**/.pnp
 .pnp.js
 
 # testing
-/coverage
+**/coverage
 
 # production
-/build
+**/build
 
 # misc
-Thumbs.db
-.DS_Store
-.env
-*.log*
+**/Thumbs.db
+**/.DS_Store
+**/.env
+**/*.log*
 
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+**/npm-debug.log*
+**/yarn-debug.log*
+**/yarn-error.log*
 
 # editors
-.idea
-*.sublime*
-.vscode
+**/.idea
+**/*.sublime*
+**/.vscode
 
+**/db
