@@ -40,6 +40,12 @@ export class UsersRepositoryService {
     });
   }
 
+  public async checkAdminUser(): Promise<GuitarShopUserEntity | null> {
+    return await this.usersModel.findOne({
+      isAdmin: true,
+    });
+  }
+
   public async verifyUser(dto: GuitarShopLoginUserDto): Promise<GuitarShopUserEntity> {
     const { email, password } = dto;
 

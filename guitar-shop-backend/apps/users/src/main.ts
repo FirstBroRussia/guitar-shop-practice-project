@@ -4,7 +4,7 @@
  */
 
 import { AllExceptionsFilter } from '@guitar-shop/core';
-import { MicroserviceDefaultPost } from '@guitar-shop/shared-types';
+import { MicroserviceDefaultPortEnum } from '@guitar-shop/shared-types';
 import { Logger } from '@nestjs/common';
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 
@@ -20,7 +20,7 @@ async function bootstrap() {
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);
 
-  const port = process.env.PORT || MicroserviceDefaultPost.UsersMicroservice;
+  const port = process.env.PORT || MicroserviceDefaultPortEnum.UsersMicroservicePort;
 
   await app.listen(port);
   Logger.log(

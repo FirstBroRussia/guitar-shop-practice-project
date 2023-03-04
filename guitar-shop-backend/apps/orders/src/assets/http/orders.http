@@ -1,0 +1,39 @@
+POST http://localhost:20004/api/orders
+Content-Type: application/json
+
+{
+  "creatorUserId": "640078a01e5b92642e27e50a",
+  "products": [
+    {
+      "productId": "03813a33-0ce7-4241-99ae-542e7c3b6ff3",
+      "price": 500000,
+      "count": 4,
+      "totalPrice": 2000000
+    },
+    {
+      "productId": "e4960069-685b-4e76-ae3d-0493e65da52d",
+      "price": 20000,
+      "count": 3,
+      "totalPrice": 60000
+    }
+  ],
+  "totalCount": 7,
+  "totalPrice": 2060000
+}
+
+###
+
+GET http://localhost:20004/api/orders/6403a9d3f87bc1e4a11a17cd
+
+
+###
+
+GET http://localhost:20004/api/orders?sort=date_desc
+
+
+###
+
+DELETE http://localhost:20004/api/orders/6403a9d3f87bc1e4a11a17cd
+
+
+###

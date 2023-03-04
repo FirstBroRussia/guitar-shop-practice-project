@@ -1,3 +1,3 @@
-import { GuitarShopProductCardSortEnum } from "@guitar-shop/shared-types";
+import { GuitarShopSortEnum } from "@guitar-shop/shared-types";
 
-export type GuitarShopProducrCardSortType = typeof GuitarShopProductCardSortEnum[keyof typeof GuitarShopProductCardSortEnum];
+export type GuitarShopProducrCardSortType = typeof GuitarShopSortEnum[keyof typeof GuitarShopSortEnum];

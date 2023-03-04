@@ -10,4 +10,6 @@ export interface UsersEnvInterface {
 
   JWT_SECRET: string;
 
+  CLI_SECRET: string;
+
 }

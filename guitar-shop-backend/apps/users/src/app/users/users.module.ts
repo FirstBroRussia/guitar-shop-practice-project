@@ -1,14 +1,12 @@
 import { Module } from '@nestjs/common';
-import { JwtModule } from '@nestjs/jwt';
-import { MongooseModule } from '@nestjs/mongoose';
-import { GuitarShopUserEntity, GuitarShopUserSchema } from '../users-repository/entity/guitar-shop-user.entity';
+import { AuthModule } from '../auth/auth.module';
+import { UsersController } from './users.controller';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([
-      { name: GuitarShopUserEntity.name, schema: GuitarShopUserSchema, },
-    ]),
-    JwtModule,
+    AuthModule
   ],
+  controllers: [UsersController],
+  providers: [],
 })
 export class UsersModule {}

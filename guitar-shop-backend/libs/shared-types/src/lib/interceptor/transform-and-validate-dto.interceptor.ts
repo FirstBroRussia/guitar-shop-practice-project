@@ -25,7 +25,7 @@ export class TransformAndValidateDtoInterceptor implements NestInterceptor {
 
     let errors;
 
-    if (this.options.isControllerUpdateMethod) {
+    if (this.options && this.options.isControllerUpdateMethod) {
       errors = await validate(transformDto, {
         skipMissingProperties: true,
       });

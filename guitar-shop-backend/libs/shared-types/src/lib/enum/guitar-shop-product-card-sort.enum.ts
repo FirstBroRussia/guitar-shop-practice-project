@@ -1,4 +1,4 @@
-export const GuitarShopProductCardSortEnum = {
+export const GuitarShopSortEnum = {
   DateDesc: 'date_desc',
   DateAsc: 'date_asc',
   PriceDesc: 'price_desc',

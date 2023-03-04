@@ -1,0 +1,17 @@
+POST http://localhost:20003/api/comments
+Content-Type: application/json
+
+{
+  "creatorUserId": "640078a01e5b92642e27e50a",
+  "productId": "640b67fc-49f2-4253-9bf2-9d4844389c99",
+  "advantages": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+  "disadvantages": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+  "comment": "Хороший комментарий",
+  "score": 2
+}
+
+###
+
+GET http://localhost:20003/api/comments/ea524872-b16f-445d-ad07-19eb2327aa4a?page=1
+
+###

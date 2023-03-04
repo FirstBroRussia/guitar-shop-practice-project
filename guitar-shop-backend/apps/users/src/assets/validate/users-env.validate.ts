@@ -2,7 +2,7 @@ import { plainToInstance } from "class-transformer";
 import { IsString, IsInt, Max, Min, validateSync } from "class-validator";
 import { UsersEnvInterface } from "../interface/users-env.interface";
 
-class UserEnvValidateConfig implements UsersEnvInterface {
+class UsersEnvValidateConfig implements UsersEnvInterface {
   @IsString()
   MONGO_DB_HOST: string;
 
@@ -30,10 +30,13 @@ class UserEnvValidateConfig implements UsersEnvInterface {
 
   @IsString()
   JWT_SECRET: string;
+
+  @IsString()
+  CLI_SECRET: string;
 }
 
 export function usersEnvValidateConfig(config: Record<string, unknown>) {
-  const transformConfig = plainToInstance(UserEnvValidateConfig, config, { enableImplicitConversion: true, });
+  const transformConfig = plainToInstance(UsersEnvValidateConfig, config, { enableImplicitConversion: true, });
 
   const errors = validateSync(transformConfig);
 

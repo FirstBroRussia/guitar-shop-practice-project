@@ -1,4 +1,4 @@
-import { ConstantValue, GuitarEnum, GuitarShopProductCardSortEnum, GuitarShopQuerySortFieldType, GuitarStringsEnum, GuitarStringsType, GuitarType } from "@guitar-shop/shared-types";
+import { ConstantValue, GuitarEnum, GuitarShopSortEnum, GuitarShopQueryProductSortFieldType, GuitarStringsEnum, GuitarStringsType, GuitarType } from "@guitar-shop/shared-types";
 import { BadRequestException } from "@nestjs/common";
 import { Expose, Transform } from "class-transformer";
 import { isEnum, IsInt, IsObject } from "class-validator";
@@ -56,32 +56,32 @@ export class FindGuitarProductCardsQuery {
 
     for (const item of transformValueInArr) {
       switch (item) {
-        case GuitarShopProductCardSortEnum.DateDesc: {
+        case GuitarShopSortEnum.DateDesc: {
           dateSort.push('desc');
 
           continue;
         }
-        case GuitarShopProductCardSortEnum.DateAsc: {
+        case GuitarShopSortEnum.DateAsc: {
           dateSort.push('asc');
 
           continue;
         }
-        case GuitarShopProductCardSortEnum.PriceDesc: {
+        case GuitarShopSortEnum.PriceDesc: {
           priceSort.push('desc');
 
           continue;
         }
-        case GuitarShopProductCardSortEnum.PriceAsc: {
+        case GuitarShopSortEnum.PriceAsc: {
           priceSort.push('asc');
 
           continue;
         }
-        case GuitarShopProductCardSortEnum.RatingDesc: {
+        case GuitarShopSortEnum.RatingDesc: {
           ratingSort.push('desc');
 
           continue;
         }
-        case GuitarShopProductCardSortEnum.RatingAsc: {
+        case GuitarShopSortEnum.RatingAsc: {
           ratingSort.push('asc');
 
           continue;
@@ -104,9 +104,9 @@ export class FindGuitarProductCardsQuery {
       dateSort: dateSort[0] || 'desc',
       priceSort: priceSort[0] || null,
       ratingSort: ratingSort[0] || null,
-    } as GuitarShopQuerySortFieldType;
+    } as GuitarShopQueryProductSortFieldType;
   })
   @IsObject()
-  sort: GuitarShopQuerySortFieldType;
+  sort: GuitarShopQueryProductSortFieldType;
 
 }
