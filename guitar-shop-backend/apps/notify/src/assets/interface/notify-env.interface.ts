@@ -1,4 +1,4 @@
-export interface UsersEnvInterface {
+export interface NotifyEnvInterface {
   MONGO_DB_HOST: string;
   MONGO_DB_PORT: number;
 
@@ -6,17 +6,19 @@ export interface UsersEnvInterface {
   MONGO_AUTH_BASE: string;
   MONGO_DB_USERNAME: string;
   MONGO_DB_PASSWORD: string;
-  MONGO_DB_CREATE_USERS_SECRET: string;
 
-  JWT_SECRET: string;
+  MAIL_SMTP_HOST: string;
+  MAIL_SMTP_PORT: number;
+  MAIL_USERNAME: string;
+  MAIL_PASSWORD: string;
+  MAIL_FROM: string;
 
-  CLI_SECRET: string;
+  CURRENT_GUITAR_SHOP_DOMAIN: string;
 
   RABBIT_USER: string;
   RABBIT_PASSWORD: string;
   RABBIT_HOST: string;
   RABBIT_PORT: number;
   RABBIT_QUEUE: string;
-
 
 }

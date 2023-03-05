@@ -14,6 +14,10 @@ export * from './lib/enum/guitar-strings.enum';
 export * from './lib/enum/guitar-shop-user-constant-value.enum';
 export * from './lib/enum/guitar-shop-product-card-constant-value.enum';
 export * from './lib/enum/guitar-shop-comment-constant-value.enum';
+export * from './lib/enum/rabbitmq-event.enum';
+
+// Symbol
+export * from './lib/symbol/unique-name.enum';
 
 // Type
 export * from './lib/type/guitar.type';
@@ -29,6 +33,8 @@ export * from './lib/dto/guitar-shop-login-user.dto';
 export * from './lib/dto/guitar-shop-logout-user.dto';
 export * from './lib/dto/guitar-shop-create-comment.dto';
 export * from './lib/dto/guitar-shop-create-order.dto';
+export * from './lib/dto/guitar-shop-notify-send-new-user.dto';
+export * from './lib/dto/guitar-shop-notify-send-new-order.dto';
 
 // RDO
 export * from './lib/rdo/guitar-shop-user.rdo';

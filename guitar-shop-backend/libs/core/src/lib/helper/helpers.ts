@@ -19,4 +19,4 @@ export const checkPassword = (password: string, passwordHash: string, salt: stri
   const loginPasswordHash = createSHA256(password, salt);
 
   return loginPasswordHash === passwordHash;
-}
+};

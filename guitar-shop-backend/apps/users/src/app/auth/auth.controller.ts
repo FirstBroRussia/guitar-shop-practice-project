@@ -1,20 +1,23 @@
 import { Request } from 'express';
 
-import { GuitarShopCreateUserDto, GuitarShopLoginUserDto, GuitarShopLogoutUserDto, GuitarShopUserRdo, JwtPayloadDto, TransformAndValidateDtoInterceptor } from '@guitar-shop/shared-types';
-import { Body, Controller, Get, HttpCode, HttpStatus, Post, Req, UseGuards, UseInterceptors } from '@nestjs/common';
+import { GuitarShopCreateUserDto, GuitarShopLoginUserDto, GuitarShopLogoutUserDto, GuitarShopUserRdo, JwtPayloadDto, RabbitMqEventEnum, TransformAndValidateDtoInterceptor, UniqueNameEnum } from '@guitar-shop/shared-types';
+import { Body, Controller, Get, HttpCode, HttpStatus, Inject, Post, Req, UseGuards, UseInterceptors } from '@nestjs/common';
 import { Logger, LoggerService } from '@nestjs/common/services';
 import { UsersRepositoryService } from '../users-repository/users-repository.service';
 import { JwtAuthUsersGuard } from '../../assets/guard/jwt-auth-users.guard';
 import { fillDTO } from '@guitar-shop/core';
 import { JwtService } from '@nestjs/jwt';
+import { ClientProxy } from '@nestjs/microservices';
 
 @Controller('auth')
 export class AuthController {
   private readonly logger: LoggerService = new Logger(AuthController.name);
 
   constructor (
-    private readonly usersRepository: UsersRepositoryService,
+    @Inject(UniqueNameEnum.RabbitMqClient) private readonly rabbitMqClient: ClientProxy,
     private readonly jwtService: JwtService,
+    private readonly usersRepository: UsersRepositoryService,
+
   ) { }
 
   @Get('checktoken')
@@ -30,7 +33,16 @@ export class AuthController {
   @UseInterceptors(new TransformAndValidateDtoInterceptor(GuitarShopCreateUserDto))
   @HttpCode(HttpStatus.CREATED)
   async register(@Body() dto: GuitarShopCreateUserDto): Promise<GuitarShopUserRdo> {
-    return fillDTO(GuitarShopUserRdo, await this.usersRepository.createUser(dto));
+    const result = await this.usersRepository.createUser(dto);
+
+    const transformResult = fillDTO(GuitarShopUserRdo, result);
+
+    this.rabbitMqClient.emit(
+      RabbitMqEventEnum.AddNewUser,
+      transformResult
+    );
+
+    return transformResult;
   }
 
   @Post('login')

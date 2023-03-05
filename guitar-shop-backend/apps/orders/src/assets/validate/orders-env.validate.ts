@@ -1,5 +1,5 @@
 import { plainToInstance } from "class-transformer";
-import { IsString, IsInt, Max, Min, validateSync } from "class-validator";
+import { IsString, IsInt, Max, Min, validateSync, IsEmail } from "class-validator";
 import { OrdersEnvInterface } from "../interface/orders-env.interface";
 
 class OrdersEnvValidateConfig implements OrdersEnvInterface {
@@ -23,6 +23,28 @@ class OrdersEnvValidateConfig implements OrdersEnvInterface {
 
   @IsString()
   MONGO_DB_PASSWORD: string;
+
+
+  @IsEmail()
+  ADMIN_EMAIL: string;
+
+
+  @IsString()
+  RABBIT_USER: string;
+
+  @IsString()
+  RABBIT_PASSWORD: string;
+
+  @IsString()
+  RABBIT_HOST: string;
+
+  @IsInt()
+  @Min(0)
+  @Max(65535)
+  RABBIT_PORT: number;
+
+  @IsString()
+  RABBIT_QUEUE: string;
 
 }
 

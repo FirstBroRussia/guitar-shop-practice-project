@@ -5,12 +5,13 @@ import { getMongoConnectionString } from '@guitar-shop/core';
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigService } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
+import { JwtModule } from '@nestjs/jwt';
+
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
-import { ConfigModule } from '@nestjs/config';
 import { UsersEnvInterface } from '../assets/interface/users-env.interface';
 import { usersEnvValidateConfig } from '../assets/validate/users-env.validate';
-import { JwtModule } from '@nestjs/jwt';
 
 
 @Module({

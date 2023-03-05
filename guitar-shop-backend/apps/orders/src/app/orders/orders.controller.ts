@@ -1,6 +1,9 @@
 import { fillDTO } from '@guitar-shop/core';
-import { FindGuitarOrdersQuery, GuitarShopCreateOrderDto, GuitarShopOrderRdo, MongoIdValidationPipe, TransformAndValidateDtoInterceptor, TransformAndValidateQueryInterceptor } from '@guitar-shop/shared-types';
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Logger, LoggerService, Param, Post, Query, UseInterceptors } from '@nestjs/common';
+import { FindGuitarOrdersQuery, GuitarShopCreateOrderDto, GuitarShopNotifySendNewOrderDto, GuitarShopOrderRdo, MongoIdValidationPipe, RabbitMqEventEnum, TransformAndValidateDtoInterceptor, TransformAndValidateQueryInterceptor, UniqueNameEnum } from '@guitar-shop/shared-types';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Inject, Logger, LoggerService, Param, Post, Query, UseInterceptors } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { ClientProxy } from '@nestjs/microservices';
+import { OrdersEnvInterface } from '../../assets/interface/orders-env.interface';
 import { OrdersRepositoryService } from '../orders-repository/orders-repository.service';
 
 @Controller('orders')
@@ -8,6 +11,8 @@ export class OrdersController {
   private readonly logger: LoggerService = new Logger(OrdersController.name);
 
   constructor (
+    @Inject(UniqueNameEnum.RabbitMqClient) private readonly rabbitMqClient: ClientProxy,
+    private readonly config: ConfigService<OrdersEnvInterface>,
     private readonly ordersRepository: OrdersRepositoryService,
   ) { }
 
@@ -16,7 +21,19 @@ export class OrdersController {
   @UseInterceptors(new TransformAndValidateDtoInterceptor(GuitarShopCreateOrderDto))
   @HttpCode(HttpStatus.CREATED)
   async createOrder(@Body() dto: GuitarShopCreateOrderDto): Promise<GuitarShopOrderRdo> {
-    return fillDTO(GuitarShopOrderRdo, await this.ordersRepository.createOrder(dto));
+    const result = await this.ordersRepository.createOrder(dto);
+
+    const transformResult = fillDTO(GuitarShopOrderRdo, result);
+
+    this.rabbitMqClient.emit<typeof RabbitMqEventEnum, GuitarShopNotifySendNewOrderDto>(
+      RabbitMqEventEnum.AddNewOrder,
+      {
+        adminEmail: this.config.get('ADMIN_EMAIL'),
+        order: transformResult,
+      }
+    );
+
+    return transformResult;
   }
 
   @Get('/:orderId')

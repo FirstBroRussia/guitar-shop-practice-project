@@ -1,8 +1,8 @@
 import { plainToInstance } from "class-transformer";
 import { IsString, IsInt, Max, Min, validateSync } from "class-validator";
-import { UsersEnvInterface } from "../interface/users-env.interface";
+import { NotifyEnvInterface } from "../interface/notify-env.interface";
 
-class UsersEnvValidateConfig implements UsersEnvInterface {
+class NotifyEnvValidateConfig implements NotifyEnvInterface {
   @IsString()
   MONGO_DB_HOST: string;
 
@@ -25,14 +25,25 @@ class UsersEnvValidateConfig implements UsersEnvInterface {
   MONGO_DB_PASSWORD: string;
 
   @IsString()
-  MONGO_DB_CREATE_USERS_SECRET: string;
+  MAIL_SMTP_HOST: string;
+
+  @IsInt()
+  @Min(0)
+  @Max(65535)
+  MAIL_SMTP_PORT: number;
+
+  @IsString()
+  MAIL_USERNAME: string;
+
+  @IsString()
+  MAIL_PASSWORD: string;
+
+  @IsString()
+  MAIL_FROM: string;
 
 
   @IsString()
-  JWT_SECRET: string;
-
-  @IsString()
-  CLI_SECRET: string;
+  CURRENT_GUITAR_SHOP_DOMAIN: string;
 
 
   @IsString()
@@ -54,8 +65,8 @@ class UsersEnvValidateConfig implements UsersEnvInterface {
 
 }
 
-export function usersEnvValidateConfig(config: Record<string, unknown>) {
-  const transformConfig = plainToInstance(UsersEnvValidateConfig, config, { enableImplicitConversion: true, });
+export function notifyEnvValidateConfig(config: Record<string, unknown>) {
+  const transformConfig = plainToInstance(NotifyEnvValidateConfig, config, { enableImplicitConversion: true, });
 
   const errors = validateSync(transformConfig);
 
@@ -65,3 +76,4 @@ export function usersEnvValidateConfig(config: Record<string, unknown>) {
 
   return transformConfig;
 }
+
