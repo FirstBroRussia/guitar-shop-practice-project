@@ -15,7 +15,6 @@ export class ProductsService {
 
   public async createProductCard(dto: GuitarShopCreateProductCardDto): Promise<GuitarShopProductCardEntity> {
     const newProductCard = new GuitarShopProductCardEntity().fillObject(dto);
-    console.log(newProductCard);
 
     const result = await this.productCardRepository.save(newProductCard);
     this.logger.log(`Новый товар создан.`);

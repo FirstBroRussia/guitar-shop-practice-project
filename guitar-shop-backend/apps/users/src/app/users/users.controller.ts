@@ -1,5 +1,5 @@
 import { fillDTO } from '@guitar-shop/core';
-import { ConstantValue, GuitarShopCreateUserDto, GuitarShopUserRdo } from '@guitar-shop/shared-types';
+import { GuitarShopCreateUserDto, GuitarShopUserRdo } from '@guitar-shop/shared-types';
 import { BadRequestException, Controller, Get, HttpCode, HttpStatus, Logger, LoggerService, Param } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { UsersEnvInterface } from '../../assets/interface/users-env.interface';
@@ -14,7 +14,7 @@ export class UsersController {
     private readonly usersRepository: UsersRepositoryService,
   ) { }
 
-  @Get('/:cliSecret')
+  @Get('/cli/:cliSecret')
   @HttpCode(HttpStatus.OK)
   async getAdminUser(@Param('cliSecret') cliSecret: string): Promise<GuitarShopUserRdo> {
     if (cliSecret !== this.config.get('CLI_SECRET')) {

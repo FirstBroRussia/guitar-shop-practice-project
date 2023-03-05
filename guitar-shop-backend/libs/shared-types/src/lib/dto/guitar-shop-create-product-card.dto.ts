@@ -1,10 +1,14 @@
 import { GuitarEnum, GuitarShopProductCardConstantValueEnum, GuitarShopProductCardInterface, GuitarStringsEnum, GuitarStringsType, GuitarType } from '@guitar-shop/shared-types';
 
 import { Expose } from 'class-transformer';
-import { IsEnum, IsInt, IsString, Max, MaxLength, Min, MinLength } from 'class-validator';
+import { IsEnum, IsInt, IsMongoId, IsString, Max, MaxLength, Min, MinLength } from 'class-validator';
 
 
 export class GuitarShopCreateProductCardDto implements GuitarShopProductCardInterface {
+  @Expose()
+  @IsMongoId()
+  creatorUserId?: string;
+
   @Expose()
   @IsString()
   @MinLength(GuitarShopProductCardConstantValueEnum.TITLE_MIN_LENGTH)
@@ -26,14 +30,14 @@ export class GuitarShopCreateProductCardDto implements GuitarShopProductCardInte
   guitarType: GuitarType;
 
   @Expose()
+  @IsEnum(GuitarStringsEnum)
+  guitarStringsCount: GuitarStringsType;
+
+  @Expose()
   @IsString()
   @MinLength(GuitarShopProductCardConstantValueEnum.ARTICLE_MIN_LENGTH)
   @MaxLength(GuitarShopProductCardConstantValueEnum.ARTICLE_MAX_LENGTH)
   article: string;
-
-  @Expose()
-  @IsEnum(GuitarStringsEnum)
-  guitarStringsCount: GuitarStringsType;
 
   @Expose()
   @IsInt()

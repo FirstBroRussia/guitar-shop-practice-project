@@ -1,3 +1,3 @@
-export type ParseCommandType = {
+export type ParsedCommandType = {
   [key: string]: string[],
 };

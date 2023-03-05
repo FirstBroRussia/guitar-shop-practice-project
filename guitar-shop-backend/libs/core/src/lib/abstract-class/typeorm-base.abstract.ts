@@ -1,7 +1,8 @@
-import { CreateDateColumn, DeleteDateColumn, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { CreateDateColumn, DeleteDateColumn, Index, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 export abstract class TypeOrmBase {
   @PrimaryGeneratedColumn('uuid')
+  @Index()
   public id: string;
 
   @CreateDateColumn()

@@ -1,11 +1,15 @@
 import { TypeOrmBase } from '@guitar-shop/core';
 import { GuitarEnum, GuitarShopCreateProductCardDto, GuitarShopProductCardInterface, GuitarStringsEnum, GuitarStringsType, GuitarType } from '@guitar-shop/shared-types';
 
-import { Entity, Column } from 'typeorm';
+import { Entity, Column, Index } from 'typeorm';
 
 
 @Entity('products')
 export default class GuitarShopProductCardEntity extends TypeOrmBase implements GuitarShopProductCardInterface {
+  @Column()
+  @Index()
+  creatorUserId: string;
+
   @Column()
   title: string;
 
@@ -46,8 +50,10 @@ export default class GuitarShopProductCardEntity extends TypeOrmBase implements 
   // feedbackCount: number;
 
   public fillObject(dto: GuitarShopCreateProductCardDto): this {
-    const { title, description, guitarType, article, guitarStringsCount, price, imageLink } = dto;
+    const { creatorUserId, title, description, guitarType, article, guitarStringsCount, price, imageLink } = dto;
 
+
+    this.creatorUserId = creatorUserId;
     this.title = title;
     this.description = description;
     this.guitarType = guitarType;
