@@ -1,0 +1,40 @@
+GET http://localhost:20006/api/products?page=1
+
+###
+
+GET http://localhost:20006/api/products/e1f7eaf1-a838-4867-abbf-1fb9c42f4b1a
+
+###
+POST http://localhost:20006/api/products
+Content-Type: application/json
+
+{
+  "title": "Щетка для чистки обуви",
+  "description": "Плотноворсистая мягкая щетка для скоростной чистки вашей обуви от разного рода загрязнений.",
+  "imageLink": "/static/image/dsfsd1fs1fsd1f351das.jpg",
+  "guitarType": "Acoustic",
+  "article": "5562348E",
+  "guitarStringsCount": 12,
+  "price": 500000
+}
+
+###
+PUT http://localhost:20006/api/products/22fcb3d9-7b99-48f7-8f5e-8fa05d151ffb
+Content-Type: application/json
+
+{
+  "title": "Гитара - ПУШКА 3000 МЕГА",
+  # "description": "Плотноворсистая мягкая щетка для скоростной чистки вашей обуви от разного рода загрязнений.",
+  # "imageLink": "/static/image/dsfsd1fs1fsd1f351das.jpg",
+  # "guitarType": "Acoustic",
+  # "article": "5562348E",
+  # "guitarStringsCount": 12,
+  "price": 125000
+}
+
+###
+
+DELETE http://localhost:20006/api/products/724288b1-cf12-46af-8c09-b72d1be33c2e
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0MDA3OGEwMWU1YjkyNjQyZTI3ZTUwYSIsImVtYWlsIjoiYWFhQGJiYi5jb20iLCJ1c2VybmFtZSI6InZhc3lhIiwiaWF0IjoxNjc4MTMyMjkzLCJleHAiOjE2NzgxMzk0OTN9.5ktXNBd-yjnsy0PYZdZNW1dUqTxokjwbi4mK_mG71Co
+
+###

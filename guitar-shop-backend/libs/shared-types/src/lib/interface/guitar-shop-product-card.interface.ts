@@ -6,7 +6,7 @@ export interface GuitarShopProductCardInterface {
   description?: string;
   createdAt?: Date;
   imageLink?: string;
-  guitarType: GuitarType,
+  guitarType?: GuitarType,
   article?: string;
   guitarStringsCount?: GuitarStringsType;
   rating?: number;

@@ -10,7 +10,7 @@ export interface GuitarShopOrderEntity extends Document { }
 
 
 @Schema({
-  collection: 'comments',
+  collection: 'orders',
   timestamps: true,
 })
 export class GuitarShopOrderEntity implements GuitarShopOrderInterface {

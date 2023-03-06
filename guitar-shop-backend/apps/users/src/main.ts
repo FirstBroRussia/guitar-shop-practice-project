@@ -14,11 +14,17 @@ import { AppModule } from './app/app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  const globalPrefix = 'api';
+  app.setGlobalPrefix(globalPrefix);
+
   const httpAdapterHost = app.get(HttpAdapterHost);
   app.useGlobalFilters(new AllExceptionsFilter(httpAdapterHost));
 
-  const globalPrefix = 'api';
-  app.setGlobalPrefix(globalPrefix);
+  app.enableCors({
+    origin: [
+      `http://localhost:${MicroserviceDefaultPortEnum.BffMicroservicePort}`,
+    ],
+  });
 
   const port = process.env.PORT || MicroserviceDefaultPortEnum.UsersMicroservicePort;
 

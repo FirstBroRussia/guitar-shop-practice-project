@@ -38,7 +38,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
           statusCode: +exception.response.status,
           timestamp: new Date().toISOString(),
           path: httpAdapter.getRequestUrl(ctx.getRequest()),
-          message: exception.response.data,
+          message: exception.response.data.message,
           errorType: null,
         };
       }

@@ -1,6 +1,6 @@
 import { Request } from 'express';
 
-import { GuitarShopCreateUserDto, GuitarShopLoginUserDto, GuitarShopLogoutUserDto, GuitarShopUserRdo, JwtPayloadDto, RabbitMqEventEnum, TransformAndValidateDtoInterceptor, UniqueNameEnum } from '@guitar-shop/shared-types';
+import { GuitarShopCreateUserDto, GuitarShopLoggedUserRdo, GuitarShopLoginUserDto, GuitarShopLogoutUserDto, GuitarShopUserRdo, JwtPayloadDto, RabbitMqEventEnum, TransformAndValidateDtoInterceptor, UniqueNameEnum } from '@guitar-shop/shared-types';
 import { Body, Controller, Get, HttpCode, HttpStatus, Inject, Post, Req, UseGuards, UseInterceptors } from '@nestjs/common';
 import { Logger, LoggerService } from '@nestjs/common/services';
 import { UsersRepositoryService } from '../users-repository/users-repository.service';
@@ -48,12 +48,14 @@ export class AuthController {
   @Post('login')
   @UseInterceptors(new TransformAndValidateDtoInterceptor(GuitarShopLoginUserDto))
   @HttpCode(HttpStatus.OK)
-  async login(@Body() dto: GuitarShopLoginUserDto): Promise<any> {
-    const { email, username } = await this.usersRepository.verifyUser(dto);
+  async login(@Body() dto: GuitarShopLoginUserDto): Promise<GuitarShopLoggedUserRdo> {
+    const { id, email, username, isAdmin } = await this.usersRepository.verifyUser(dto);
 
     const payload = {
+      id: id,
       email: email,
       username: username,
+      isAdmin: isAdmin,
     };
 
     const accessToken = await this.jwtService.signAsync(payload);
@@ -61,13 +63,13 @@ export class AuthController {
     return {
       accessToken: accessToken,
       ...payload,
-    };
+    } as GuitarShopLoggedUserRdo;
   }
 
   @Get('logout')
   @UseGuards(JwtAuthUsersGuard)
   @HttpCode(HttpStatus.OK)
-  async logout(@Req() req: Request & { user: JwtPayloadDto }): Promise<any> {
+  async logout(@Req() req: Request & { user: JwtPayloadDto }): Promise<string> {
     const accessToken = req.headers.authorization?.split(' ')[1];
     const { email, exp } = req.user;
 

@@ -1,16 +1,14 @@
 /* eslint-disable @typescript-eslint/ban-types */
 
-import { GuitarShopOrderInterface, GuitarShopOrderProductItemInterface } from "@guitar-shop/shared-types";
-import { BadRequestException } from "@nestjs/common";
 import { Expose, Transform } from "class-transformer";
-import { IsMongoId, isNumber, IsNumber, isUUID, min, Min } from "class-validator";
+import { isNumber, IsNumber, isUUID, min, Min } from "class-validator";
+
+import { BadRequestException } from "@nestjs/common";
+
+import { GuitarShopOrderInterface, GuitarShopOrderProductItemInterface } from "@guitar-shop/shared-types";
 
 
-export class GuitarShopCreateOrderDto implements GuitarShopOrderInterface {
-  @Expose()
-  @IsMongoId()
-  creatorUserId: string;
-
+export class GuitarShopCreateOrderBffDto implements GuitarShopOrderInterface {
   @Expose()
   @Transform(({ value }) => {
     if (!Array.isArray(value)) {

@@ -34,9 +34,16 @@ export * from './lib/dto/guitar-shop-create-comment.dto';
 export * from './lib/dto/guitar-shop-create-order.dto';
 export * from './lib/dto/guitar-shop-notify-send-new-user.dto';
 export * from './lib/dto/guitar-shop-notify-send-new-order.dto';
+export * from './lib/dto/guitar-shop-update-product-card.dto';
+
+export * from './lib/dto/bff/guitar-shop-create-product-card-bff.dto';
+export * from './lib/dto/bff/guitar-shop-update-product-card-bff.dto';
+export * from './lib/dto/bff/guitar-shop-create-comment-bff.dto';
+export * from './lib/dto/bff/guitar-shop-create-order-bff.dto';
 
 // RDO
 export * from './lib/rdo/guitar-shop-user.rdo';
+export * from './lib/rdo/guitar-shop-logged-user.rdo';
 export * from './lib/rdo/guitar-shop-product-card.rdo';
 export * from './lib/rdo/guitar-shop-comment.rdo';
 export * from './lib/rdo/guitar-shop-order.rto';

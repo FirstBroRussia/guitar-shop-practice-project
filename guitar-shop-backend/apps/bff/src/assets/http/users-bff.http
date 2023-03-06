@@ -1,0 +1,37 @@
+POST http://localhost:20006/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "admin@admin.com",
+  "password": "aaaaaa",
+  "username": "vasya"
+}
+
+###
+
+POST http://localhost:20006/api/auth/login
+Content-Type: application/json
+
+# {
+#   "email": "aaa@bbb.com",
+#   "password": "aaaaaa"
+# }
+
+{
+  "email": "admin@admin.com",
+  "password": "123456"
+}
+
+###
+
+GET  http://localhost:20006/api/auth/checktoken
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFhYUBiYmIuY29tIiwidXNlcm5hbWUiOiJ2YXN5YSIsImlhdCI6MTY3ODExMzU3NiwiZXhwIjoxNjc4MTIwNzc2fQ.ee5g8L2IsFhQ3qEdw04_1qQG97856-Jyvc-SluBvjak
+
+
+###
+
+GET  http://localhost:20006/api/auth/logout
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFhYUBiYmIuY29tIiwidXNlcm5hbWUiOiJ2YXN5YSIsImlhdCI6MTY3ODExMzU3NiwiZXhwIjoxNjc4MTIwNzc2fQ.ee5g8L2IsFhQ3qEdw04_1qQG97856-Jyvc-SluBvjak
+
+###
+

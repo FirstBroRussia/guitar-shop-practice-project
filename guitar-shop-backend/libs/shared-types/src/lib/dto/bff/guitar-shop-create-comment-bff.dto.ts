@@ -1,13 +1,9 @@
 import { GuitarShopCommentConstantValueEnum, GuitarShopCommentInterface } from "@guitar-shop/shared-types";
 import { Expose } from "class-transformer";
-import { IsInt, IsMongoId, IsString, IsUUID, Max, MaxLength, Min, MinLength } from "class-validator";
+import { IsInt, IsString, IsUUID, Max, MaxLength, Min, MinLength } from "class-validator";
 
 
-export class GuitarShopCreateCommentDto implements GuitarShopCommentInterface {
-  @Expose()
-  @IsMongoId()
-  creatorUserId: string;
-
+export class GuitarShopCreateCommentBffDto implements GuitarShopCommentInterface {
   @Expose()
   @IsUUID()
   productId: string;

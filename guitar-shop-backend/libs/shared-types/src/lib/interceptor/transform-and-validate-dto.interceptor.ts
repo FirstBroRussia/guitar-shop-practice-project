@@ -1,6 +1,6 @@
 import { Request } from 'express';
 import { CallHandler, ExecutionContext, Injectable, Logger, LoggerService, NestInterceptor, BadRequestException } from "@nestjs/common";
-import { ClassConstructor, plainToInstance } from "class-transformer";
+import { ClassConstructor } from "class-transformer";
 import { validate } from "class-validator";
 
 import { fillDTO } from '@guitar-shop/core';
