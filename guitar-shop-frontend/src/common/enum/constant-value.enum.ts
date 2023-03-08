@@ -1,0 +1,4 @@
+export const ConstantValueEnum = {
+  DEFAULT_CATALOG_FILTER_MIN_PRICE: 0,
+  DEFAULT_CATALOG_FILTER_MAX_PRICE: 200_000,
+} as const;
