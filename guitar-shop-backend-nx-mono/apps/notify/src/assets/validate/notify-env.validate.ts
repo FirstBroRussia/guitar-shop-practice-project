@@ -45,6 +45,9 @@ class NotifyEnvValidateConfig implements NotifyEnvInterface {
   @IsString()
   CURRENT_GUITAR_SHOP_DOMAIN: string;
 
+  @IsString()
+  BACKEND_URL: string;
+
 
   @IsString()
   RABBIT_USER: string;

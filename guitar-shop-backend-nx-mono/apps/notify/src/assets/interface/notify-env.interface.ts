@@ -14,6 +14,7 @@ export interface NotifyEnvInterface {
   MAIL_FROM: string;
 
   CURRENT_GUITAR_SHOP_DOMAIN: string;
+  BACKEND_URL: string;
 
   RABBIT_USER: string;
   RABBIT_PASSWORD: string;

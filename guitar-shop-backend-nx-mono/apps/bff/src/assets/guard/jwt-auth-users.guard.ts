@@ -1,9 +1,9 @@
 import { JwtPayloadDto } from "@guitar-shop/shared-types";
-import { BadRequestException, CanActivate, ExecutionContext, Injectable, InternalServerErrorException, Logger, LoggerService } from "@nestjs/common";
+import { CanActivate, ExecutionContext, Injectable, Logger, LoggerService } from "@nestjs/common";
 import { ConfigService } from '@nestjs/config';
 
 import { Request } from 'express';
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import { BffEnvInterface } from "../interface/bff-env.interface";
 
 @Injectable()

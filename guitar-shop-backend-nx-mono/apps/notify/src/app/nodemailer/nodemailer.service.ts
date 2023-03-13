@@ -1,8 +1,12 @@
-import { GuitarShopNotifySendNewOrderDto, GuitarShopNotifySendNewUserDto, GuitarShopOrderRdo } from '@guitar-shop/shared-types';
+import { GuitarShopNotifySendNewOrderDto, GuitarShopNotifySendNewUserDto } from '@guitar-shop/shared-types';
 import { ISendMailOptions, MailerService } from '@nestjs-modules/mailer';
 import { Injectable, Logger, LoggerService } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NotifyEnvInterface } from '../../assets/interface/notify-env.interface';
+
+import * as ejs from 'ejs';
+import { resolve } from 'path';
+import { getGuitarTypeStringForEJSComponents, getTransformDateForEJSComponents } from '@guitar-shop/core';
 
 const NOTIFY_NEW_USER_SUBJECT_TEXT = 'Приветствуем вас наш новый покупатель!!!';
 const NOTIFY_NEW_ORDER_SUBJECT_TEXT = 'Информация о новом заказе.';
@@ -40,23 +44,27 @@ export class NodemailerService {
 
   public async sendNotifyNewOrder(dto: GuitarShopNotifySendNewOrderDto) {
     const { adminEmail, order } = dto;
-    const { products, totalCount, totalPrice, createdAt } = order;
+    const { createdAt } = order;
 
+    ejs.renderFile(resolve('apps', 'notify', 'src', 'assets', 'template', 'add-new-order.ejs'), {
+      backendUrl: this.config.get('BACKEND_URL'),
+      order: order,
+      date: getTransformDateForEJSComponents(createdAt),
+      getGuitarTypeStringFn: getGuitarTypeStringForEJSComponents,
+    }, (err, data) => {
+      if (err) {
+        throw err;
+      } else {
+        const options: ISendMailOptions = {
+        to: adminEmail,
+        subject: NOTIFY_NEW_ORDER_SUBJECT_TEXT,
+        html: data
+        };
 
-    const options: ISendMailOptions = {
-      to: adminEmail,
-      subject: NOTIFY_NEW_ORDER_SUBJECT_TEXT,
-      template: './add-new-order',
-      context: {
-        products,
-        totalCount,
-        totalPrice,
-        createdAt,
-      },
-    };
-
-    await this.mailerService.sendMail(options);
-    this.logger.log(`Произведена отправка email: ${adminEmail} администратора информации о новом заказе.`);
+        this.mailerService.sendMail(options);
+        this.logger.log(`Произведена отправка email: ${adminEmail} администратора информации о новом заказе.`);
+      }
+    });
   }
 
 }

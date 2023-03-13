@@ -1,6 +1,7 @@
-import { FindGuitarOrdersQuery, GuitarShopCreateOrderBffDto, GuitarShopCreateOrderDto, GuitarShopFindProductsInterMicroserviceDto, GuitarShopOrderBffRdo, GuitarShopOrderProductItemInterface, GuitarShopOrderRdo, GuitarShopProductCardRdo, JwtPayloadDto, MongoIdValidationPipe, TransformAndValidateDtoInterceptor, TransformAndValidateQueryInterceptor } from '@guitar-shop/shared-types';
-import { Body, Controller, Delete, ForbiddenException, Get, HttpCode, HttpStatus, Logger, LoggerService, Param, Post, Req, UseGuards, UseInterceptors } from '@nestjs/common';
+import { FindGuitarOrdersQuery, GuitarShopCreateOrderBffDto, GuitarShopCreateOrderDto, GuitarShopFindProductsInterMicroserviceDto, GuitarShopNotifySendNewOrderDto, GuitarShopOrderBffRdo, GuitarShopOrderProductItemInterface, GuitarShopOrderRdo, GuitarShopProductCardRdo, JwtPayloadDto, MongoIdValidationPipe, RabbitMqEventEnum, TransformAndValidateDtoInterceptor, TransformAndValidateQueryInterceptor, UniqueNameEnum } from '@guitar-shop/shared-types';
+import { Body, Controller, Delete, ForbiddenException, Get, HttpCode, HttpStatus, Inject, Logger, LoggerService, Param, Post, Req, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { ClientProxy } from '@nestjs/microservices';
 import axios from 'axios';
 import { JwtAuthUsersGuard } from '../../assets/guard/jwt-auth-users.guard';
 import { BffEnvInterface } from '../../assets/interface/bff-env.interface';
@@ -13,6 +14,7 @@ export class OrdersController {
   private readonly ordersMicroserviceUrl: string;
 
   constructor(
+    @Inject(UniqueNameEnum.RabbitMqClient) private readonly rabbitMqClient: ClientProxy,
     private readonly config: ConfigService<BffEnvInterface>,
   ) {
     this.productsMicroserviceUrl = `http://${config.get("PRODUCTS_MICROSERVICE_HOST")}:${config.get("PRODUCTS_MICROSERVICE_PORT")}`;
@@ -24,7 +26,7 @@ export class OrdersController {
   @UseInterceptors(new TransformAndValidateDtoInterceptor(GuitarShopCreateOrderBffDto))
   @UseGuards(JwtAuthUsersGuard)
   @HttpCode(HttpStatus.CREATED)
-  async createOrder(@Req() req: Request & { user: JwtPayloadDto, }, @Body() dto: GuitarShopCreateOrderBffDto): Promise<GuitarShopOrderRdo> {
+  async createOrder(@Req() req: Request & { user: JwtPayloadDto, }, @Body() dto: GuitarShopCreateOrderBffDto): Promise<GuitarShopOrderBffRdo> {
     const { id } = req.user;
 
     const dtoToOrdersMicroservice: GuitarShopCreateOrderDto = {
@@ -32,7 +34,50 @@ export class OrdersController {
       ...dto,
     };
 
-    return (await axios.post(`${this.ordersMicroserviceUrl}${req.url}`, dtoToOrdersMicroservice)).data as GuitarShopOrderRdo;
+    const newOrder = (await axios.post(`${this.ordersMicroserviceUrl}${req.url}`, dtoToOrdersMicroservice)).data as GuitarShopOrderRdo;
+
+    const productIds = [];
+    newOrder.products.forEach(item => productIds.push(item.productId));
+
+    const dtoToProductsMicroservice: GuitarShopFindProductsInterMicroserviceDto = {
+      productsIds: productIds,
+    };
+
+    const products = (await axios.post(`${this.productsMicroserviceUrl}/api/products/productsfororders`, dtoToProductsMicroservice)).data as GuitarShopProductCardRdo[];
+
+    const transformProductsArr = newOrder.products.map(item => {
+      const product = products.find(elem => elem.id === item.productId);
+
+      const transformItem = {
+        ...item,
+        product: product,
+      };
+
+      delete transformItem.productId;
+
+      return transformItem;
+    }) as unknown as GuitarShopOrderProductItemInterface[];
+
+    const transformNewOrder = {
+      ...newOrder,
+      products: transformProductsArr,
+    } as GuitarShopOrderBffRdo;
+
+
+    try {
+      this.rabbitMqClient.emit<typeof RabbitMqEventEnum, GuitarShopNotifySendNewOrderDto>(
+        RabbitMqEventEnum.AddNewOrder,
+        {
+          adminEmail: this.config.get('ADMIN_EMAIL'),
+          order: transformNewOrder,
+        }
+      );
+    } catch (err) {
+      this.logger.error(err);
+    }
+
+
+    return transformNewOrder;
   }
 
   @Get('/:orderId')
