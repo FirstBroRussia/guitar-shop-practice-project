@@ -50,7 +50,7 @@ export class AuthController {
 
   @Get('logout')
   @UseGuards(JwtAuthUsersGuard)
-  @HttpCode(HttpStatus.OK)
+  @HttpCode(HttpStatus.NO_CONTENT)
   async logout(@Req() req: Request & { user: JwtPayloadDto }): Promise<string> {
     const accessToken = req.headers.authorization?.split(' ')[1];
 

@@ -1,4 +1,6 @@
-# Руководство по работе с проектом
+# Руководство по работе с практическим проектом «GuitarShop»
+
+## На клиентскую часть было затрачено примерно 32 часа
 
 Данный проект создан с помощью [Create React App](https://github.com/facebook/create-react-app).
 
@@ -6,8 +8,8 @@
 
 ---
 
-_Не удаляйте и не изменяйте папки и файлы:_
-_`.editorconfig`, `.gitattributes`, `.gitignore`, `package.json`._
+*Не удаляйте и не изменяйте папки и файлы:*
+*`.editorconfig`, `.gitattributes`, `.gitignore`, `package.json`.*
 
 ---
 

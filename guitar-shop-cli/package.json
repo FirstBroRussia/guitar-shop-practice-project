@@ -4,8 +4,7 @@
   "description": "CLI интерфейс для проекта «Guitar Shop»",
   "main": "cli.js",
   "scripts": {
-    "start": "npm run build && node ./dist/cli.js",
-    "cli": "node ./dist/cli.js",
+    "cli": "npm run build && node ./dist/cli.js",
     "cli:dev": "npm run ts ./src/cli.ts",
     "build": "npm run clean && npm run compile",
     "lint": "eslint src/ --ext .ts",

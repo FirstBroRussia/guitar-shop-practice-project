@@ -1,0 +1,793 @@
+openapi: '3.0.1'
+
+info:
+  title: REST API сервер для практического проекта "GuitarShop".
+  description: |-
+    * Списoк ресурсов и маршрутов сервера "GuitarShop".
+  version: '1.0'
+
+tags:
+  - name: users
+    description: Действия с пользователями.
+  - name: products
+    description: Действия с товарами.
+  - name: comments
+    description: Действия с комментариями.
+  - name: orders
+    description: Действия с заказами.
+
+paths:
+  /auth/checktoken:
+    get:
+      tags:
+        - "users"
+      summary: Проверка валидность токена
+      description: Сервис предоставляет возможность проверить валидность авторизационного токена.
+      operationId: checktoken
+      responses:
+        '200':
+          description: Объект с данными о пользователе
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JwtPayload'
+        '400':
+          description: Ошибка тела запроса
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ObjectRequestBodyError'
+        '401':
+          description: Необходима авторизация для данного действия
+          content: {}
+
+  /auth/register:
+    post:
+      tags:
+        - "users"
+      summary: Создание нового пользователя
+      description: Сервис предоставляет возможность создать нового пользователя. Новому пользователю соответствует уникальный email. Ресурс доступен только анонимным пользователям.
+      operationId: createNewUser
+      requestBody:
+        description: Объект с данными о новом пользователе
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUser'
+      responses:
+        '201':
+          description: Объект с данными о созданном пользователе
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Ошибка тела запроса
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ObjectRequestBodyError'
+        '409':
+          description: Пользователь с таким email существует
+          content: {}
+
+  /auth/login:
+    post:
+      tags:
+        - "users"
+      summary: Авторизация на сервисе
+      description: Сервис предоставляет возможность для авторизации пользователя.
+      operationId: loginUser
+      requestBody:
+        description: Объект с данными для авторизации
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginUser'
+      responses:
+        "200":
+          description: Статус авторизации
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoggedUser"
+        "400":
+          description: Ошибка тела запроса
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ObjectRequestBodyError'
+        "401":
+          description: Неверный логин или пароль
+          content: {}
+
+  /auth/logout:
+    get:
+      tags:
+        - "users"
+      summary: Выход из закрытой части приложения
+      description: Сервис предоставляет возможность для завершения пользовательского сеанса. Ресурс доступен только авторизованным клиентам.
+      operationId: logoutUser
+      requestBody:
+        description: Авторизационный токен
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Token"
+      responses:
+        "204":
+          description: Сеанс завершен
+          content: {}
+        "401":
+          description: Пользователь не авторизован
+          content: {}
+
+
+
+  /products:
+    get:
+      tags:
+        - "products"
+      summary: Получение списка товаров
+      description: Сервис предоставляет возможность получить список фильмов не более чем из 9 штук. Передается пагинационное число. Есть возможность сортировки повозрастанию и убыванию по полям цены, популярности и даты.
+      operationId: getProducts
+      parameters:
+        - name: type
+          in: query
+          description: Тип гитар
+          required: true
+          schema:
+            $ref: '#/components/schemas/GuitarType'
+            example: Acoustic,Electro
+        - name: strings
+          in: query
+          description: Количество струн
+          required: true
+          schema:
+            $ref: '#/components/schemas/GuitarStringsCount'
+            example: 6,7,12
+        - name: sort
+          in: query
+          description: Вид сортировки
+          required: true
+          schema:
+            $ref: '#/components/schemas/Sort'
+            example: Rating_desc
+        - name: page
+          in: query
+          description: Пагинационное число
+          required: true
+          schema:
+            type: string
+            example: 1
+      responses:
+        '200':
+          description: Массив из объектов товаров
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CreateProduct'
+        "400":
+          description: Ошибка тела запроса
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ObjectRequestBodyError'
+
+    post:
+      tags:
+        - "products"
+      summary: Добавить новый товар.
+      description: Сервис предоставляет возможность добавить новый товар. Ресурс доступен только администратору.
+      operationId: createProduct
+      requestBody:
+        description: Объект с новым фильмом
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateProduct'
+      responses:
+        '201':
+          description: Новый товар
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateProduct'
+        '400':
+          description: Ошибка тела запроса
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ObjectRequestBodyError'
+        '401':
+          description: Необходима авторизация для данного действия
+          content: {}
+
+
+  /products[:productId]:
+    get:
+      tags:
+        - "products"
+      summary: Получение списка товаров
+      description: Сервис предоставляет возможность получить товар по ID.
+      operationId: getProductById
+      parameters:
+        - name: productId
+          in: path
+          description: Id товара
+          required: true
+          schema:
+            type: string
+            example: UUID
+      responses:
+        '200':
+          description: Объект
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductCardInfo'
+        "400":
+          description: Ошибка тела запроса
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ObjectRequestBodyError'
+
+    put:
+      tags:
+        - "products"
+      summary: Обновить данные о товаре.
+      description: Сервис предоставляет возможность обновить данные о товаре. Ресурс доступен только администратору.
+      operationId: updateProductById
+      parameters:
+        - name: productId
+          in: path
+          description: Id товара
+          required: true
+          schema:
+            type: string
+            example: UUID
+      requestBody:
+        description: Объект с новым фильмом
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateProduct'
+      responses:
+        '201':
+          description: Новый товар
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateProduct'
+        '400':
+          description: Ошибка тела запроса
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ObjectRequestBodyError'
+        '401':
+          description: Необходима авторизация для данного действия
+          content: {}
+
+    delete:
+      tags:
+        - "products"
+      summary: Удалить товар.
+      description: Сервис предоставляет возможность удалить товаре. Ресурс доступен только администратору.
+      operationId: updateProductById
+      parameters:
+        - name: productId
+          in: path
+          description: Id товара
+          required: true
+          schema:
+            type: string
+            example: UUID
+      responses:
+        '201':
+          description: OK
+          content: {}
+        '400':
+          description: Ошибка тела запроса
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ObjectRequestBodyError'
+        '401':
+          description: Необходима авторизация для данного действия
+          content: {}
+
+
+  /orders:
+    get:
+      tags:
+        - "orders"
+      summary: Получение списка заказов
+      description: Сервис предоставляет возможность получить список фильмов не более чем из 9 штук. Передается пагинационное число. Есть возможность сортировки п овозрастанию и убыванию по полям цены и даты. Смотерть заказы может только администратор.
+      parameters:
+        - name: sort
+          in: query
+          description: Вид сортировки
+          required: true
+          schema:
+            $ref: '#/components/schemas/Sort'
+            example: Rating_desc
+        - name: page
+          in: query
+          description: Пагинационное число
+          required: true
+          schema:
+            type: string
+            example: 1
+      operationId: getOrders
+      responses:
+        '200':
+          description: Массив с объектами заказов
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+        '400':
+          description: Ошибка тела запроса
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ObjectRequestBodyError'
+        '401':
+          description: Необходима авторизация для данного действия
+          content: {}
+
+    post:
+      tags:
+        - "orders"
+      summary: Создание заказа
+      description: Сервис предоставляет возможность создать заказ. Заказ могут создать только авторизованные пользователи.
+      requestBody:
+        description: Объект с новым заказом
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOrder'
+      operationId: createOrder
+      responses:
+        '201':
+          description: Новый заказ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '400':
+          description: Ошибка тела запроса
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ObjectRequestBodyError'
+        '401':
+          description: Необходима авторизация для данного действия
+          content: {}
+
+  /orders[:orderId]:
+    get:
+      tags:
+        - "orders"
+      summary: Получение данных о заказе по ID
+      description: Сервис предоставляет возможность получение данных о заказе. Заказ может просмотреть только администратор.
+      parameters:
+        - name: orderId
+          in: path
+          description: ID заказа
+          required: true
+          schema:
+            type: string
+            example: MongoID
+      operationId: getOrderByID
+      responses:
+        '200':
+          description: Объект заказа
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '400':
+          description: Ошибка тела запроса
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ObjectRequestBodyError'
+        '401':
+          description: Необходима авторизация для данного действия
+          content: {}
+
+    delete:
+      tags:
+        - "orders"
+      summary: Удаление заказа по ID
+      description: Сервис предоставляет возможность удаление заказа по ID. Удалить заказ может только администратор.
+      parameters:
+        - name: orderId
+          in: path
+          description: ID заказа
+          required: true
+          schema:
+            type: string
+            example: MongoID
+      operationId: getOrderByID
+      responses:
+        '200':
+          description: OK
+          content: {}
+        '400':
+          description: Ошибка тела запроса
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ObjectRequestBodyError'
+        '401':
+          description: Необходима авторизация для данного действия
+          content: {}
+
+
+  /comments:
+    post:
+      tags:
+        - "comments"
+      summary: Создание нового комментария
+      description: Сервис предоставляет возможность создать новый комментарий к товару. Оставить комментарий может только авторизованный пользователь.
+      requestBody:
+        description: Объект с новым комментарием
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateComment'
+      operationId: createComment
+      responses:
+        '201':
+          description: Новый объект c комментарием
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+        '400':
+          description: Ошибка тела запроса
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ObjectRequestBodyError'
+        '401':
+          description: Необходима авторизация для данного действия
+          content: {}
+
+  /comments[:productId]:
+    get:
+      tags:
+        - "comments"
+      summary: Получение списка комментариев по ID товара
+      description: Сервис предоставляет возможность получения списка комментариев по ID товара. Получить комментарии могут любые пользователи.
+      parameters:
+        - name: productId
+          in: path
+          description: ID товара
+          required: true
+          schema:
+            type: string
+            example: UUID
+      operationId: getCommentsById
+      responses:
+        '200':
+          description: Объект заказа
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Comment'
+        '400':
+          description: Ошибка тела запроса
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ObjectRequestBodyError'
+        '401':
+          description: Необходима авторизация для данного действия
+          content: {}
+
+
+components:
+  schemas:
+
+    GuitarType:
+      type: string
+      enum:
+        - Acoustic
+        - Electro
+        - Ukulele
+      example: Acoustic
+
+    GuitarStringsCount:
+      type: number
+      enum:
+        - 4
+        - 6
+        - 7
+        - 12
+      example: 6
+
+    Sort:
+      type: string
+      enum:
+        - Rating_desc
+        - Rating_asc
+        - Date_desc
+        - Date_asc
+        - Price_desc
+        - Price_asc
+      example: Rating_desc
+
+    Rating:
+      type: string
+      format: integer
+      example: 4
+
+    Date:
+      type: string
+      example: 2021-12-12T21:55:28.147Z
+
+    JwtPayload:
+      type: object
+      properties:
+        id:
+          type: string
+          example: MongoID
+        email:
+          type: string
+          example: aaa@bbb.com
+        username:
+          type: string
+          example: Vasya
+        isAdmin:
+          type: boolean
+          example: false
+        exp:
+          type: number
+          example: 1234567890
+        iat:
+          type: number
+          example: 1234567890
+
+    CreateProduct:
+      type: object
+      properties:
+        title:
+          type: string
+          example: Хорошая Укулеле
+        description:
+          type: string
+          example: Описание гитары
+        guitarType:
+          $ref: '#/components/schemas/GuitarType'
+          example: Electro
+        guitarStringsCount:
+          $ref: '#/components/schemas/GuitarStringsCount'
+        article:
+          type: string
+          example: dasd1fad5sadsa
+        price:
+          type: number
+          example: 20000
+        imageLink:
+          type: string
+          example: /api/products/upload/dasdfsdfsd.jpeg
+
+    ProductCardInfo:
+      type: object
+      properties:
+        id:
+          type: string
+          example: UUID
+        title:
+          type: string
+          example: Мощная гитара
+        description:
+          type: string
+          example: Описание гитары
+        guitarType:
+          $ref: '#/components/schemas/GuitarType'
+          example: Electro
+        guitarStringsCount:
+          $ref: '#/components/schemas/GuitarStringsCount'
+        article:
+          type: string
+          example: dasd1fad5sadsa
+        rating:
+          type: number
+          example: 4
+        price:
+          type: number
+          example: 20000
+        imageLink:
+          type: string
+          example: /api/products/upload/dasdfsdfsd.jpeg
+        commentsCount:
+          type: number
+          example: 24
+        createdAt:
+          $ref: '#/components/schemas/Date'
+          example: 2021-12-12T21:55:28.147Z
+
+    CreateOrder:
+      type: object
+      properties:
+        products:
+          type: array
+          items:
+            type: string
+            example: UUID product
+        totalCount:
+          type: number
+          example: 5
+        totalPrice:
+          type: number
+          example: 100000
+
+    OrderProduct:
+      type: object
+      properties:
+        product:
+          $ref: '#/components/schemas/ProductCardInfo'
+        price:
+          type: number
+          example: 20000
+        count:
+          type: number
+          example: 5
+        totalPrice:
+          type: number
+          example: 100000
+
+    Order:
+      type: object
+      properties:
+        id:
+          type: string
+          example: MongoID
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderProduct'
+        totalCount:
+          type: number
+          example: 5
+        totalPrice:
+          type: number
+          example: 100000
+        createdAt:
+          $ref: '#/components/schemas/Date'
+
+
+
+    CreateComment:
+      type: object
+      properties:
+        productId:
+          type: string
+          example: UUID
+        advantages:
+          type: string
+          example: Хорошая гитара
+        disadvantages:
+          type: string
+          example: Плохая гитара
+        comment:
+          type: string
+          example: Отзыв о гитаре
+        score:
+          $ref: "#/components/schemas/Rating"
+
+    Comment:
+      type: object
+      properties:
+        id:
+          type: string
+          example: MongoID
+        username:
+          type: string
+          example: John Doe
+        productId:
+          type: string
+          example: UUID
+        advantages:
+          type: string
+          example: Хорошая гитара
+        disadvantages:
+          type: string
+          example: Плохая гитара
+        comment:
+          type: string
+          example: Отзыв о гитаре
+        score:
+          $ref: "#/components/schemas/Rating"
+        createdAt:
+          $ref: '#/components/schemas/Date'
+
+    CreateUser:
+      type: object
+      properties:
+        email:
+          type: string
+          example: John.doe@gmail.com
+        username:
+          type: string
+          example: John Doe
+        password:
+          type: string
+          example: 11Gfsdfsd55sf5d
+        isAdmin:
+          type: boolean
+          example: false
+
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          example: MongoID
+        email:
+          type: string
+          example: John.doe@gmail.com
+        username:
+          type: string
+          example: John Doe
+        isAdmin:
+          type: boolean
+          example: false
+
+    LoggedUser:
+      type: object
+      properties:
+        accessToken:
+          type: string
+          example:
+            - $ref: "#/components/schemas/Token"
+        email:
+          type: string
+          example: John.doe@gmail.com
+        username:
+          type: string
+          example: John Doe
+        isAdmin:
+          type: boolean
+          example: false
+
+    LoginUser:
+      type: object
+      properties:
+        email:
+          type: string
+          example: John.doe@gmail.com
+        password:
+          type: string
+          example: password
+
+    Token:
+      type: string
+      example: d61sa55555555555555555555555555555555d1sa51d6sa51d6as5d1sa1f651sad61g65sd15sa=
+
+    FilmId:
+      type: string
+      example: 507f1f77bcf86cd799439011
+
+    ObjectRequestBodyError:
+      type: string
+      example: У вас заполнены некорректно следующие поля - {тут происходит перечисление полей}
