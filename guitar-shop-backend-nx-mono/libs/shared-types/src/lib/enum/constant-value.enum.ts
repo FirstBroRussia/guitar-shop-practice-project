@@ -8,9 +8,9 @@ export const GuitarProductCardConstantValueEnum = {
 } as const;
 
 export const GuitarShopCommentsConstantValue = {
-  DEFAULT_COMMENTS_LIMIT: 50,
+  DEFAULT_COMMENTS_LIMIT: 9,
 } as const;
 
 export const GuitarShopOrdersConstantValue = {
-  DEFAULT_ORDERS_LIMIT: 10,
+  DEFAULT_ORDERS_LIMIT: 6,
 } as const;

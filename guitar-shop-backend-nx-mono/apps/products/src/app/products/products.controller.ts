@@ -1,8 +1,8 @@
 import { fillDTO } from '@guitar-shop/core';
-import { FindGuitarProductCardsQuery, GuitarShopCreateProductCardDto, GuitarShopProductCardRdo, TransformAndValidateDtoInterceptor, TransformAndValidateQueryInterceptor } from '@guitar-shop/shared-types';
+import { FindGuitarProductCardsQuery, GuitarShopCreateProductCardDto, GuitarShopFindProductsInterMicroserviceDto, GuitarShopProductCardRdo, GuitarShopUpdateRatingAndCommentsCountProductCardDto, TransformAndValidateDtoInterceptor, TransformAndValidateQueryInterceptor } from '@guitar-shop/shared-types';
 import { Body, Controller, Logger, LoggerService, NotFoundException, ParseUUIDPipe, Post, Query } from '@nestjs/common';
 import { HttpCode } from '@nestjs/common';
-import { Delete, Get, Param, Put, UseInterceptors } from '@nestjs/common/decorators';
+import { Delete, Get, Param, Patch, Put, UseInterceptors } from '@nestjs/common/decorators';
 import { HttpStatus } from '@nestjs/common/enums';
 import { ProductsService } from './products.service';
 
@@ -25,7 +25,6 @@ export class ProductsController {
   }
 
   @Get('/:productId')
-  @UseInterceptors(new TransformAndValidateQueryInterceptor(FindGuitarProductCardsQuery))
   @HttpCode(HttpStatus.OK)
   async findProductCardById(@Param('productId', ParseUUIDPipe) productId: string): Promise<GuitarShopProductCardRdo> {
     return fillDTO(
@@ -39,6 +38,13 @@ export class ProductsController {
           return res;
         })
       );
+  }
+
+  @Post('/productsfororders')
+  @UseInterceptors(new TransformAndValidateDtoInterceptor(GuitarShopFindProductsInterMicroserviceDto))
+  @HttpCode(HttpStatus.OK)
+  async findProductsForOrders(@Body() dto: GuitarShopFindProductsInterMicroserviceDto): Promise<GuitarShopProductCardRdo[]> {
+    return fillDTO(GuitarShopProductCardRdo, await this.productsService.findProductCardByProductIds(dto)) as unknown as GuitarShopProductCardRdo[];
   }
 
   @Post('/')
@@ -55,6 +61,12 @@ export class ProductsController {
   @HttpCode(HttpStatus.OK)
   async updateProductCard(@Param('productId', ParseUUIDPipe) productId: string, @Body() dto: GuitarShopCreateProductCardDto): Promise<GuitarShopProductCardRdo> {
     return fillDTO(GuitarShopProductCardRdo, await this.productsService.updateProductCard(productId, dto));
+  }
+
+  @Patch('/updateratingandinccommentscount/:productId')
+  @HttpCode(HttpStatus.OK)
+  async incCommentsCountToProductCard(@Param('productId', ParseUUIDPipe) productId: string, @Body() dto: GuitarShopUpdateRatingAndCommentsCountProductCardDto): Promise<void> {
+    return await this.productsService.updateRatingAndIncCommentsCountByProductId(productId, dto);
   }
 
   @Delete('/:productId')

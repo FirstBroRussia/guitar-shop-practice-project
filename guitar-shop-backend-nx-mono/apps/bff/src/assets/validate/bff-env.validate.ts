@@ -42,6 +42,10 @@ class BffEnvValidateConfig implements BffEnvInterface {
   @IsString()
   UPLOAD_DIR: string;
 
+
+  @IsString()
+  INTER_SERVICE_SECRET: string;
+
 }
 
 export function bffEnvValidateConfig(config: Record<string, unknown>) {

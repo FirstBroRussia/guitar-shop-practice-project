@@ -15,11 +15,15 @@
       "Мелодичная гитара для самых изысканных любителей данног инструмента. Она поможет вам раскрыть свои таланты."
     ],
     "imageLink": [
-      "/storage/guitar-image/1.jpg",
-      "/storage/guitar-image/2.jpg",
-      "/storage/guitar-image/3.jpg",
-      "/storage/guitar-image/4.jpg",
-      "/storage/guitar-image/5.jpg"
+      "/api/products/upload/catalog-product-0.png",
+      "/api/products/upload/catalog-product-1.png",
+      "/api/products/upload/catalog-product-2.png",
+      "/api/products/upload/catalog-product-3.png",
+      "/api/products/upload/catalog-product-4.png",
+      "/api/products/upload/catalog-product-5.png",
+      "/api/products/upload/catalog-product-6.png",
+      "/api/products/upload/catalog-product-7.png",
+      "/api/products/upload/catalog-product-8.png"
     ],
     "guitarType": [
       "Electro",

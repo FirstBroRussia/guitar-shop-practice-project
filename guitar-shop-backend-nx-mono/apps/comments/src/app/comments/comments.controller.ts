@@ -22,10 +22,10 @@ export class CommentsController {
   @Get('/:productId')
   @UseInterceptors(new TransformAndValidateQueryInterceptor(FindGuitarCommentsQuery))
   @HttpCode(HttpStatus.OK)
-  async findCommentsByProductId(@Param('productId', ParseUUIDPipe) productId: string, @Query() query: FindGuitarCommentsQuery): Promise<[GuitarShopCommentRdo| GuitarShopCommentRdo[], number]> {
+  async findCommentsByProductId(@Param('productId', ParseUUIDPipe) productId: string, @Query() query: FindGuitarCommentsQuery): Promise<[GuitarShopCommentRdo[], number]> {
     const [comments, count] = await this.commentsRepository.findCommentsByProductId(productId, query);
 
-    return [fillDTO(GuitarShopCommentRdo, comments), count];
+    return [fillDTO(GuitarShopCommentRdo, comments), count] as unknown as [GuitarShopCommentRdo[], number];
   }
 
 }

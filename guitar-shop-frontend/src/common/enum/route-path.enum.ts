@@ -1,14 +1,18 @@
 export const RoutePathEnum = {
   Main: '/',
-  SignIn: '/login',
+  Login: '/login',
   Register: '/register',
   Catalog: '/catalog',
   Cart: '/cart',
   ProductCard: '/catalog/:productId',
-  Orders: '/orders',
-  ProductCardList: '/product-list',
+  OrderList: '/order-list',
+  Order: '/order/:orderId',
+  ProductList: '/product-list',
   AddProductCard: '/add-product',
-  EditProductCard: '/edit-product',
+  EditProductCard: '/edit-product/:productId',
+
+  ProductCardCharacteristics: '#characteristics',
+  ProductCardDescription: '#description',
 
   NotFound: '*',
 } as const;

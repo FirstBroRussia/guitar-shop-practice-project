@@ -1,5 +1,5 @@
 import { JwtPayloadDto } from "@guitar-shop/shared-types";
-import { Injectable, Logger, LoggerService, CanActivate, BadRequestException, UnauthorizedException } from "@nestjs/common";
+import { Injectable, Logger, LoggerService, CanActivate, UnauthorizedException } from "@nestjs/common";
 import { ExecutionContext } from "@nestjs/common/interfaces";
 import { Reflector } from "@nestjs/core";
 import { JwtService } from "@nestjs/jwt";
@@ -23,7 +23,7 @@ export class JwtAuthUsersGuard implements CanActivate {
     const existLogoutedUser = await this.usersRepository.findLogoutedUser(accessToken);
 
     if (existLogoutedUser) {
-      throw new BadRequestException('Ваш токен доступа уже вышел из системы, прошу вас заново пройти аутентификацию.');
+      throw new UnauthorizedException('Ваш токен доступа уже вышел из системы, прошу вас заново пройти аутентификацию.');
     }
 
     const jwtPayload: JwtPayloadDto = await this.jwtService.verifyAsync(accessToken)

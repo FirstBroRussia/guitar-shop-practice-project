@@ -3,6 +3,7 @@ export * from './lib/interface/guitar-shop-user.interface';
 export * from './lib/interface/guitar-shop-product-card.interface';
 export * from './lib/interface/guitar-shop-comment.interface';
 export * from './lib/interface/guitar-shop-order.interface';
+export * from './lib/interface/guitar-shop-order-product-item-bff.interface';
 
 // Enum
 export * from './lib/enum/constant-value.enum';
@@ -35,11 +36,14 @@ export * from './lib/dto/guitar-shop-create-order.dto';
 export * from './lib/dto/guitar-shop-notify-send-new-user.dto';
 export * from './lib/dto/guitar-shop-notify-send-new-order.dto';
 export * from './lib/dto/guitar-shop-update-product-card.dto';
+export * from './lib/dto/guitar-shop-update-rating-and-comments-count.dto';
+export * from './lib/dto/guitar-shop-users-for-comments.dto';
 
 export * from './lib/dto/bff/guitar-shop-create-product-card-bff.dto';
 export * from './lib/dto/bff/guitar-shop-update-product-card-bff.dto';
 export * from './lib/dto/bff/guitar-shop-create-comment-bff.dto';
 export * from './lib/dto/bff/guitar-shop-create-order-bff.dto';
+export * from './lib/dto/bff/guitar-shop-find-products-inter-microservice-bff.dto';
 
 // RDO
 export * from './lib/rdo/guitar-shop-user.rdo';
@@ -47,6 +51,9 @@ export * from './lib/rdo/guitar-shop-logged-user.rdo';
 export * from './lib/rdo/guitar-shop-product-card.rdo';
 export * from './lib/rdo/guitar-shop-comment.rdo';
 export * from './lib/rdo/guitar-shop-order.rto';
+
+export * from './lib/rdo/bff/guitar-shop-comment-bff.rdo';
+export * from './lib/rdo/bff/guitar-shop-order-bff.rdo';
 
 // Query
 export * from './lib/query/find-guitar-product-cards.query';

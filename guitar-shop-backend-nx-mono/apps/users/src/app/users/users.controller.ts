@@ -1,6 +1,6 @@
 import { fillDTO } from '@guitar-shop/core';
-import { GuitarShopCreateUserDto, GuitarShopUserRdo } from '@guitar-shop/shared-types';
-import { BadRequestException, Controller, Get, HttpCode, HttpStatus, Logger, LoggerService, Param } from '@nestjs/common';
+import { GuitarShopCreateUserDto, GuitarShopUserRdo, GuitarShopUsersCommentsInterMicroserviceDto, TransformAndValidateDtoInterceptor } from '@guitar-shop/shared-types';
+import { BadRequestException, Body, Controller, ForbiddenException, Get, HttpCode, HttpStatus, Logger, LoggerService, Param, Post, UseInterceptors } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { UsersEnvInterface } from '../../assets/interface/users-env.interface';
 import { UsersRepositoryService } from '../users-repository/users-repository.service';
@@ -28,9 +28,9 @@ export class UsersController {
     }
 
     const dto: GuitarShopCreateUserDto = {
-      email: 'admin@admin.com',
-      username: 'admin',
-      password: '123456',
+      email: this.config.get('ADMIN_EMAIL'),
+      username: this.config.get('ADMIN_USERNAME'),
+      password: this.config.get('ADMIN_PASSWORD'),
       isAdmin: true,
     };
 
@@ -40,5 +40,17 @@ export class UsersController {
     return fillDTO(GuitarShopUserRdo, result);
   }
 
+  @Post('/usersforcomments')
+  @UseInterceptors(new TransformAndValidateDtoInterceptor(GuitarShopUsersCommentsInterMicroserviceDto))
+  @HttpCode(HttpStatus.OK)
+  async getUsersData(@Body() dto: GuitarShopUsersCommentsInterMicroserviceDto): Promise<GuitarShopUserRdo[]> {
+    const { interMicroserviceSecret } = dto;
+
+    if (interMicroserviceSecret !== this.config.get('INTER_SERVICE_SECRET')) {
+      throw new ForbiddenException('Вы не имеете права доступа для получения данной информации');
+    }
+
+    return fillDTO(GuitarShopUserRdo, await this.usersRepository.findUsers(dto)) as unknown as GuitarShopUserRdo[];
+  }
 
 }

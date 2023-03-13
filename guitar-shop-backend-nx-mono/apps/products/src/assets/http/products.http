@@ -27,7 +27,7 @@ Content-Type: application/json
 
 ###
 
-GET http://localhost:20002/api/products
+GET http://localhost:20002/api/products?sort=price_asc&type=Ukulele
 
 ###
 

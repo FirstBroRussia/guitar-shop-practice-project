@@ -1,10 +1,10 @@
-export const CatalogSortTypeEnum = {
+export const SortTypeEnum = {
   SortDate: 'date',
   SortPrice: 'price',
   SortRating: 'rating',
 } as const;
 
-export const CatalogSortOrderEnum = {
+export const SortOrderEnum = {
   SortAsc: 'asc',
   SortDesc: 'desc',
-};
+} as const;

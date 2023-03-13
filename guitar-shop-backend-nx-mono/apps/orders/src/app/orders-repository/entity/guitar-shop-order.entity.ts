@@ -15,6 +15,11 @@ export interface GuitarShopOrderEntity extends Document { }
 })
 export class GuitarShopOrderEntity implements GuitarShopOrderInterface {
   @Prop({
+
+  })
+  orderNumber: number;
+
+  @Prop({
     required: true,
   })
   products?: GuitarShopOrderProductItemInterface[];

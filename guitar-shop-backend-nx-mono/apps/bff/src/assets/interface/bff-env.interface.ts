@@ -13,4 +13,6 @@ export interface BffEnvInterface {
 
   UPLOAD_DIR: string;
 
+  INTER_SERVICE_SECRET: string;
+
 }

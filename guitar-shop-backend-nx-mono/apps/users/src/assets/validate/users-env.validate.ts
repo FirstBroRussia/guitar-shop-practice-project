@@ -1,5 +1,5 @@
 import { plainToInstance } from "class-transformer";
-import { IsString, IsInt, Max, Min, validateSync } from "class-validator";
+import { IsString, IsInt, Max, Min, validateSync, IsEmail } from "class-validator";
 import { UsersEnvInterface } from "../interface/users-env.interface";
 
 class UsersEnvValidateConfig implements UsersEnvInterface {
@@ -34,6 +34,9 @@ class UsersEnvValidateConfig implements UsersEnvInterface {
   @IsString()
   CLI_SECRET: string;
 
+  @IsString()
+  INTER_SERVICE_SECRET: string;
+
 
   @IsString()
   RABBIT_USER: string;
@@ -51,6 +54,15 @@ class UsersEnvValidateConfig implements UsersEnvInterface {
 
   @IsString()
   RABBIT_QUEUE: string;
+
+  @IsEmail()
+  ADMIN_EMAIL: string;
+
+  @IsString()
+  ADMIN_USERNAME: string;
+
+  @IsString()
+  ADMIN_PASSWORD: string;
 
 }
 

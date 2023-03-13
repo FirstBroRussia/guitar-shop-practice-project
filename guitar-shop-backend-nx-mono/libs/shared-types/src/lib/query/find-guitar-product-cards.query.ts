@@ -6,7 +6,7 @@ import { isEnum, IsInt, IsObject } from "class-validator";
 export class FindGuitarProductCardsQuery {
   @Expose()
   @Transform(({ value }) => {
-    const transformValue = (+value);
+    const transformValue = +value;
 
     if (transformValue && Number.isNaN(transformValue)) {
       throw new BadRequestException('Переданное пагинационное значение не является числом');
@@ -21,90 +21,90 @@ export class FindGuitarProductCardsQuery {
   page: number;
 
   @Expose()
-  @Transform(({ value })=> {
-    if (value && !isEnum(value, GuitarEnum)) {
-      throw new BadRequestException('Переданное значение типа гитары не соответствует ни одному из возможных значений. Повторите попытку с корректным значением');
-    }
+  @Transform(({ value }) => {
     if (!value) {
       return null;
     }
 
-    return value;
+    const transformValueInArr = String(value).split(',');
+
+    transformValueInArr.forEach(item => {
+      if (item && !isEnum(item, GuitarEnum)) {
+        throw new BadRequestException('Переданное значение типа гитары не соответствует ни одному из возможных значений. Повторите попытку с корректным значением');
+      }
+    });
+
+    return transformValueInArr;
   })
-  type: GuitarType;
+  type: GuitarType[] | null;
 
   @Expose()
-  @Transform(({ value })=> {
-    if (value && !isEnum(+value, GuitarStringsEnum)) {
-      throw new BadRequestException('Переданное значение количества струн на гитаре не соответствует ни одному из возможных значений. Повторите попытку с корректным значением');
-    }
+  @Transform(({ value }) => {
     if (!value) {
       return null;
     }
 
-    return +value;
+    let transformValueInArr = String(value).split(',') as any[];
+
+    transformValueInArr = transformValueInArr.map(item => {
+      const transformItem = +item;
+
+      if (transformItem && !isEnum(transformItem, GuitarStringsEnum)) {
+        throw new BadRequestException('Переданное значение количества струн на гитаре не соответствует ни одному из возможных значений. Повторите попытку с корректным значением');
+      }
+
+      return transformItem;
+    });
+
+
+    return transformValueInArr as number[];
   })
-  strings: GuitarStringsType;
+  strings: GuitarStringsType[] | null;
 
   @Expose()
   @Transform(({ value }) => {
     const transformValueInArr = String(value).split(',');
 
-    const dateSort = [];
-    const priceSort = [];
-    const ratingSort = [];
+    if (transformValueInArr.length > 1) {
+      throw new BadRequestException('Одновременно возможно выбрать только один вид сортировки. Повторите запрос.');
+    }
 
-    for (const item of transformValueInArr) {
-      switch (item) {
-        case GuitarShopSortEnum.DateDesc: {
-          dateSort.push('desc');
-
-          continue;
+    switch (transformValueInArr[0]) {
+      case GuitarShopSortEnum.DateDesc: {
+        return {
+          dateSort: 'desc',
         }
-        case GuitarShopSortEnum.DateAsc: {
-          dateSort.push('asc');
-
-          continue;
-        }
-        case GuitarShopSortEnum.PriceDesc: {
-          priceSort.push('desc');
-
-          continue;
-        }
-        case GuitarShopSortEnum.PriceAsc: {
-          priceSort.push('asc');
-
-          continue;
-        }
-        case GuitarShopSortEnum.RatingDesc: {
-          ratingSort.push('desc');
-
-          continue;
-        }
-        case GuitarShopSortEnum.RatingAsc: {
-          ratingSort.push('asc');
-
-          continue;
-        }
-        default: continue
       }
+      case GuitarShopSortEnum.DateAsc: {
+        return {
+          dateSort: 'asc',
+        }
+      }
+      case GuitarShopSortEnum.PriceDesc: {
+        return {
+          priceSort: 'desc',
+        }
+      }
+      case GuitarShopSortEnum.PriceAsc: {
+        return {
+          priceSort: 'asc',
+        }
+      }
+      case GuitarShopSortEnum.RatingDesc: {
+        return {
+          ratingSort: 'desc',
+        }
+      }
+      case GuitarShopSortEnum.RatingAsc: {
+        return {
+          ratingSort: 'asc',
+        }
+      }
+      default: return {
+        dateSort: 'desc',
+      };
     }
 
-    if (dateSort.length > 1) {
-      throw new BadRequestException('Возможно выбрать только один вид сортировки по дате добавления');
-    }
-    if (priceSort.length > 1) {
-      throw new BadRequestException('Возможно выбрать только один вид сортировки по стоимости товара');
-    }
-    if (ratingSort.length > 1) {
-      throw new BadRequestException('Возможно выбрать только один вид сортировки по рейтингу товара');
-    }
-
-    return {
-      dateSort: dateSort[0] || 'desc',
-      priceSort: priceSort[0] || null,
-      ratingSort: ratingSort[0] || null,
-    } as GuitarShopQueryProductSortFieldType;
   })
   @IsObject()
   sort: GuitarShopQueryProductSortFieldType;

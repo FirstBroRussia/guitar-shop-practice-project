@@ -1,7 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
+import { enableMapSet } from 'immer';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { axiosApi } from '../common/api/axios.api';
 import { commonReducer } from './reducer';
+
+enableMapSet();
 
 export const store = configureStore({
   reducer: commonReducer,
@@ -9,6 +12,7 @@ export const store = configureStore({
     thunk: {
       extraArgument: axiosApi,
     },
+    serializableCheck: false,
   }),
 });
 

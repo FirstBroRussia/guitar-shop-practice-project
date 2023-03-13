@@ -11,4 +11,5 @@ export interface GuitarShopProductCardInterface {
   guitarStringsCount?: GuitarStringsType;
   rating?: number;
   price?: number;
+  commentsCount?: number;
 }

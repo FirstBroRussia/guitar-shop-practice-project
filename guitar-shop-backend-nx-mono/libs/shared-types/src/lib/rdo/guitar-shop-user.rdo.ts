@@ -7,10 +7,10 @@ export class GuitarShopUserRdo implements GuitarShopUserInterface {
   id: string;
 
   @Expose()
-  username: string;
+  email: string;
 
   @Expose()
-  email: string;
+  username: string;
 
   @Expose()
   isAdmin?: boolean;

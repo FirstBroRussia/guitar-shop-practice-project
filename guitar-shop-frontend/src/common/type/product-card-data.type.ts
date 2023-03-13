@@ -2,7 +2,7 @@ import { GuitarStringsType } from './guitar-strings.type';
 import { GuitarType } from './guitar.type';
 
 
-export type ProductCardServerResponseType = {
+export type ProductCardDataType = {
   id: string;
 
   title: string;
@@ -21,7 +21,9 @@ export type ProductCardServerResponseType = {
 
   imageLink: string;
 
-  createdAt: Date;
+  commentsCount: number;
+
+  createdAt: string;
 
 }
 

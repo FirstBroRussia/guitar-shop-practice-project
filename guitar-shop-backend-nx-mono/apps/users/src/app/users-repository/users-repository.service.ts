@@ -1,5 +1,5 @@
 import { checkPassword } from '@guitar-shop/core';
-import { GuitarShopCreateUserDto, GuitarShopLoginUserDto, GuitarShopLogoutUserDto } from '@guitar-shop/shared-types';
+import { GuitarShopCreateUserDto, GuitarShopLoginUserDto, GuitarShopLogoutUserDto, GuitarShopUsersCommentsInterMicroserviceDto } from '@guitar-shop/shared-types';
 import { BadRequestException, Injectable, Logger, LoggerService, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectModel } from '@nestjs/mongoose';
@@ -33,6 +33,7 @@ export class UsersRepositoryService {
       this.logger.log(`Произведена операция по очистке авторизационных токенов в БД вышедших из системы пользователей.`);
     }, BYPASS_DATABASE_TIME);
   }
+
 
   public async checkUser(email: string): Promise<GuitarShopUserEntity | null> {
     return await this.usersModel.findOne({
@@ -98,6 +99,14 @@ export class UsersRepositoryService {
   public async findLogoutedUser(accessToken: string): Promise<LogoutUserEntity | null> {
     return await this.logoutedUsersModel.findOne({
       accessToken: accessToken,
+    });
+  }
+
+  public async findUsers(dto: GuitarShopUsersCommentsInterMicroserviceDto): Promise<LogoutUserEntity[] | null> {
+    const { creatorUserIds }= dto;
+
+    return await this.usersModel.find({
+      _id: creatorUserIds,
     });
   }
 

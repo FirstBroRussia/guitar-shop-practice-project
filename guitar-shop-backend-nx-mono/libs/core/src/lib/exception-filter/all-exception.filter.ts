@@ -25,7 +25,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
         console.error(exception.cause, exception.stack);
 
         responseBody = {
-          statusCode: HttpStatus.BAD_REQUEST,
+          statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
           timestamp: new Date().toISOString(),
           path: httpAdapter.getRequestUrl(ctx.getRequest()),
           message: exception.cause,

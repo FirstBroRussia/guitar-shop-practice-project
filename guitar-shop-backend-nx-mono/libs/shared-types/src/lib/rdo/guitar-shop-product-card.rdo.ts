@@ -32,6 +32,9 @@ export class GuitarShopProductCardRdo implements GuitarShopProductCardInterface 
   imageLink?: string;
 
   @Expose()
+  commentsCount: number;
+
+  @Expose()
   createdAt?: Date;
 
 }

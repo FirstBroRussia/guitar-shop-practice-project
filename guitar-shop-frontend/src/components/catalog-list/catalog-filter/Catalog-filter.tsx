@@ -1,24 +1,29 @@
 /* eslint-disable no-nested-ternary */
-import { ChangeEvent, Dispatch, MouseEvent, SetStateAction, useCallback, useRef } from 'react';
-import { GuitarStringsEnum } from '../../common/enum/guitar-strings.enum';
-import { GuitarEnum } from '../../common/enum/guitar.enum';
-import { CatalogFilterValueType } from '../../common/type/catalog-filter.type';
-import { GuitarStringsType } from '../../common/type/guitar-strings.type';
-import { GuitarType } from '../../common/type/guitar.type';
+
+import { Dispatch, SetStateAction, useCallback, useRef } from 'react';
+import { GuitarStringsEnum } from '../../../common/enum/guitar-strings.enum';
+import { GuitarEnum } from '../../../common/enum/guitar.enum';
+import { CatalogFilterValueType } from '../../../common/type/catalog-filter.type';
+import { CatalogStateType } from '../../../common/type/catalog-state.type';
+import { GuitarStringsType } from '../../../common/type/guitar-strings.type';
+import { GuitarType } from '../../../common/type/guitar.type';
 
 type CatalogFilterPropsType = {
+  catalogState: CatalogStateType;
+  setCatalogState: Dispatch<SetStateAction<CatalogStateType>>;
   catalogFilterState: CatalogFilterValueType;
   setCatalogFilterState: Dispatch<SetStateAction<CatalogFilterValueType>>;
 };
 
 
-export default function CatalogFilter({ catalogFilterState, setCatalogFilterState }: CatalogFilterPropsType) {
-  const initialCatalogFilterState = useRef(catalogFilterState);
+export default function CatalogFilter({ catalogState, setCatalogState, catalogFilterState, setCatalogFilterState }: CatalogFilterPropsType) {
+  const initialCatalogFilterState = useRef(catalogState);
 
-  const { minPricePlaceholder, maxPricePlaceholder, guitarTypeArr, guitarStringsArr } = catalogFilterState;
+  const { guitarTypeArr, guitarStringsArr } = catalogState;
+  const { minPricePlaceholder, maxPricePlaceholder } = catalogFilterState;
 
 
-  const onMinPriceChangeHandler = useCallback((evt: ChangeEvent<HTMLInputElement>) => {
+  const onMinPriceChangeHandler: React.ChangeEventHandler<HTMLInputElement> = useCallback((evt) => {
     const value = +evt.target.value;
 
     const currentCatalogFilterValue: CatalogFilterValueType = {
@@ -29,7 +34,7 @@ export default function CatalogFilter({ catalogFilterState, setCatalogFilterStat
     setCatalogFilterState(currentCatalogFilterValue);
   }, [catalogFilterState, setCatalogFilterState]);
 
-  const onMaxPriceChangeHandler = useCallback((evt: ChangeEvent<HTMLInputElement>) => {
+  const onMaxPriceChangeHandler: React.ChangeEventHandler<HTMLInputElement> = useCallback((evt) => {
     const value = +evt.target.value;
 
     const currentCatalogFilterValue: CatalogFilterValueType = {
@@ -40,47 +45,54 @@ export default function CatalogFilter({ catalogFilterState, setCatalogFilterStat
     setCatalogFilterState(currentCatalogFilterValue);
   }, [catalogFilterState, setCatalogFilterState]);
 
-  const onGuitarTypeCheckboxChangeHandler = useCallback((evt: ChangeEvent<HTMLInputElement>) => {
+
+  const onGuitarTypeCheckboxChangeHandler: React.ChangeEventHandler<HTMLInputElement> = useCallback((evt) => {
     const targetElementName = evt.target.name as unknown as GuitarType;
     const targetElementChecked = evt.target.checked;
 
-    const currentCatalogFilterValue: CatalogFilterValueType = {
-      ...catalogFilterState,
+    const currentCatalogState: CatalogStateType = {
+      ...catalogState,
+      page: initialCatalogFilterState.current.page,
     };
 
     if (targetElementChecked) {
-      currentCatalogFilterValue.guitarTypeArr.push(targetElementName);
+      currentCatalogState.guitarTypeArr = [...currentCatalogState.guitarTypeArr, targetElementName];
     } else {
-      currentCatalogFilterValue.guitarTypeArr = currentCatalogFilterValue.guitarTypeArr.filter((item) => !(item === targetElementName));
+      currentCatalogState.guitarTypeArr = currentCatalogState.guitarTypeArr.filter((item) => !(item === targetElementName));
     }
 
-    setCatalogFilterState(currentCatalogFilterValue);
-  }, [catalogFilterState, setCatalogFilterState]);
+    setCatalogState(currentCatalogState);
+  }, [catalogState, setCatalogState]);
 
-  const onGuitarStringsCheckboxChangeHandler = useCallback((evt: ChangeEvent<HTMLInputElement>) => {
+  const onGuitarStringsCheckboxChangeHandler: React.ChangeEventHandler<HTMLInputElement> = useCallback((evt) => {
     const targetElementGuitarStringsCountValue = +evt.target.name.substring(0, evt.target.name.indexOf('-')) as GuitarStringsType;
     const targetElementChecked = evt.target.checked;
 
 
-    const currentCatalogFilterValue: CatalogFilterValueType = {
-      ...catalogFilterState,
+    const currentCatalogState: CatalogStateType = {
+      ...catalogState,
+      page: initialCatalogFilterState.current.page,
     };
 
     if (targetElementChecked) {
-      currentCatalogFilterValue.guitarStringsArr.push(targetElementGuitarStringsCountValue);
+      currentCatalogState.guitarStringsArr = [...currentCatalogState.guitarStringsArr, targetElementGuitarStringsCountValue];
     } else {
-      currentCatalogFilterValue.guitarStringsArr = currentCatalogFilterValue.guitarStringsArr.filter((item) => !(item === targetElementGuitarStringsCountValue));
+      currentCatalogState.guitarStringsArr = currentCatalogState.guitarStringsArr.filter((item) => !(item === targetElementGuitarStringsCountValue));
     }
 
-    setCatalogFilterState(currentCatalogFilterValue);
-  }, [catalogFilterState, setCatalogFilterState]);
+    setCatalogState(currentCatalogState);
+  }, [catalogState, setCatalogState]);
 
 
-  const onDefaultFilterStateButtonClickHandler = useCallback((evt: MouseEvent<HTMLButtonElement>) => {
+  const onDefaultFilterStateButtonClickHandler: React.MouseEventHandler<HTMLButtonElement> = useCallback((evt) => {
     evt.preventDefault();
 
-    setCatalogFilterState(initialCatalogFilterState.current);
-  }, [setCatalogFilterState]);
+    setCatalogState({
+      ...catalogState,
+      guitarTypeArr: initialCatalogFilterState.current.guitarTypeArr,
+      guitarStringsArr: initialCatalogFilterState.current.guitarStringsArr,
+    });
+  }, [catalogState, setCatalogState]);
 
 
   return (

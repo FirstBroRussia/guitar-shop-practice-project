@@ -36,9 +36,7 @@ export class AuthController {
   @UseInterceptors(new TransformAndValidateDtoInterceptor(GuitarShopCreateUserDto))
   @HttpCode(HttpStatus.CREATED)
   async register(@Body() dto: GuitarShopCreateUserDto): Promise<GuitarShopUserRdo> {
-    const result = (await axios.post(`${this.usersMicroserviceUrl}/api/auth/register`, dto)).data as GuitarShopUserRdo;
-
-    return fillDTO(GuitarShopUserRdo, result);
+    return (await axios.post(`${this.usersMicroserviceUrl}/api/auth/register`, dto)).data as GuitarShopUserRdo;
   }
 
   @Post('login')

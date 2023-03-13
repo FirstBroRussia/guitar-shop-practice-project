@@ -38,20 +38,21 @@ export default class GuitarShopProductCardEntity extends TypeOrmBase implements 
 
   @Column({
     default: 0,
+    type: 'double precision',
   })
   rating: number;
 
   @Column()
   price: number;
 
-  // @Column({
-  //   default: 0,
-  // })
-  // feedbackCount: number;
+  @Column({
+    default: 0,
+  })
+  commentsCount: number;
+
 
   public fillObject(dto: GuitarShopCreateProductCardDto): this {
     const { creatorUserId, title, description, guitarType, article, guitarStringsCount, price, imageLink } = dto;
-
 
     this.creatorUserId = creatorUserId;
     this.title = title;

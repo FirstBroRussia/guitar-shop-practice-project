@@ -1168,7 +1168,7 @@ button,
   cursor: pointer;
 }
 
-.header--logged .header__link .header__link-text,
+/* .header--logged .header__link .header__link-text,
 .header--logged .header__link:hover .header__link-text,
 .header--logged .header__link:focus .header__link-text,
 .header--logged .header__link:active .header__link-text,
@@ -1181,7 +1181,7 @@ button,
 .header--admin .header__link:focus .header__link-text,
 .header--admin .header__link:active .header__link-text {
   display: none;
-}
+} */
 
 .header--logged .header__link:hover,
 .header--logged .header__link:focus,
@@ -3940,6 +3940,8 @@ button,
 }
 
 .edit-item-image__btn-wrap {
+  position: relative;
+
   display: grid;
 
   padding: 0 7px;
@@ -4904,4 +4906,14 @@ button,
   .page-content::after {
     background-image: url("data:image/svg+xml,%3Csvg width='1020' height='5' viewBox='0 0 1020 5' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='1020' height='5' fill='%23131212'/%3E%3C/svg%3E%0A"), url("../img/content/bg_header@2x.png");
   }
+}
+
+/* Свои стили */
+
+.display_none {
+  display: none;
+}
+
+.events_none {
+  pointer-events: none;
 }

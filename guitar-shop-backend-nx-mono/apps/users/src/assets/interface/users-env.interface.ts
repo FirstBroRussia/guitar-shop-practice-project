@@ -12,11 +12,18 @@ export interface UsersEnvInterface {
 
   CLI_SECRET: string;
 
+  INTER_SERVICE_SECRET: string;
+
+
   RABBIT_USER: string;
   RABBIT_PASSWORD: string;
   RABBIT_HOST: string;
   RABBIT_PORT: number;
   RABBIT_QUEUE: string;
 
+
+  ADMIN_EMAIL: string;
+  ADMIN_USERNAME: string;
+  ADMIN_PASSWORD: string;
 
 }

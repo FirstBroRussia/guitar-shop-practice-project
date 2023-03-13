@@ -20,3 +20,5 @@ export const checkPassword = (password: string, passwordHash: string, salt: stri
 
   return loginPasswordHash === passwordHash;
 };
+
+export const getNewRatingForProductCard = (currentRating: number, currentCommentsCount: number, newScoreRating: number): number => ((currentRating * currentCommentsCount) + newScoreRating) / (currentCommentsCount + 1);
