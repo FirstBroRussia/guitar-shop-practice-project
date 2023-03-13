@@ -3,13 +3,13 @@ services:
   mongodb:
     image: mongo
     restart: always
-    container_name: mongodb-comments
+    container_name: mongodb-orders
     environment:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: test
-      MONGO_INITDB_DATABASE: guitar-shop-comments
+      MONGO_INITDB_DATABASE: guitar-shop-orders
     ports:
-      - 27018:27017
+      - 27019:27017
     healthcheck:
       test: ["CMD-SHELL", "mongosh --eval \"db.adminCommand('ping')\" "]
       interval: 10s
@@ -22,10 +22,22 @@ services:
   mongodb-express:
     image: mongo-express
     restart: always
-    container_name: mongo-express-guitar-shop-comments
+    container_name: mongo-express-guitar-shop-orders
     ports:
-      - 22002:8081
+      - 22004:8081
     environment:
       ME_CONFIG_MONGODB_ADMINUSERNAME: admin
       ME_CONFIG_MONGODB_ADMINPASSWORD: test
       ME_CONFIG_MONGODB_URL: mongodb://admin:test@mongodb:27017/
+
+  guitarshop.orders:
+    image: guitarshop.orders
+    container_name: guitarshop.orders.service
+    network_mode: 'host'
+    depends_on:
+      - mongodb
+      - mongodb-express
+    ports:
+      - 20004:3333
+    env_file:
+      - ./environments/development.env

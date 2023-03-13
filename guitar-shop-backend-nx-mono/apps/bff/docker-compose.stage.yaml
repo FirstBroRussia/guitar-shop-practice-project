@@ -1,0 +1,9 @@
+version: '3.5'
+services:
+  guitarshop.bff:
+    image: guitarshop.bff
+    container_name: guitarshop.bff.service
+    ports:
+      - 20006:3333
+    env_file:
+      - ./environments/development.env

@@ -3,6 +3,7 @@ version: '3.5'
 services:
   postgres:
     image: postgres:14-alpine
+    restart: always
     container_name: postgres
     environment:
       POSTGRES_DB: "guitarshop_products"
@@ -30,6 +31,18 @@ services:
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@admin.com
       PGADMIN_DEFAULT_PASSWORD: admin
+
+  guitarshop.products:
+    image: guitarshop.products
+    container_name: guitarshop.products.service
+    network_mode: 'host'
+    depends_on:
+      - postgres
+    ports:
+      - 20002:3333
+    env_file:
+      - ./environments/development.env
+
 
 networks:
   postgres:
